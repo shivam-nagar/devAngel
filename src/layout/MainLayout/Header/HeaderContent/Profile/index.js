@@ -55,16 +55,29 @@ function a11yProps(index) {
 
 const Profile = () => {
     const theme = useTheme();
-
     const handleLogout = async () => {
-        // logout
+        setAddress('');
     };
 
     const anchorRef = useRef(null);
     const [open, setOpen] = useState(false);
+    const [address, setAddress] = useState('');
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
+        if (window.ethereum && address === '') {
+            // res[0] for fetching a first wallet
+            window.ethereum
+              .request({ method: "eth_requestAccounts" })
+              .then((res) => accountChangeHandler(res[0]));
+          } else {
+            alert("install metamask extension!!");
+          }
     };
+
+  const accountChangeHandler = (account) => {
+    setAddress(account);
+    setMyAddress(account);
+  };
 
     const handleClose = (event) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
@@ -80,7 +93,6 @@ const Profile = () => {
     };
 
     const iconBackColorOpen = 'grey.300';
-
     return (
         <Box sx={{ flexShrink: 0, ml: 0.75 }}>
             <ButtonBase
@@ -98,12 +110,12 @@ const Profile = () => {
             >
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
                     <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-                    <Typography variant="subtitle1">John Doe</Typography>
+                    <Typography variant="subtitle1">Connect Wallet</Typography>
                 </Stack>
             </ButtonBase>
             <Popper
                 placement="bottom-end"
-                open={open}
+                open={false}
                 anchorEl={anchorRef.current}
                 role={undefined}
                 transition
