@@ -10,10 +10,21 @@ function createProposal(id, qid, eid) {
     return { id, qid, eid };
 }
 
+let myAddress = '';
+function getMyAddress() {
+    return myAddress;
+}
+
+function setMyAddress(_address) {
+    myAddress = _address;
+}
+
 const Utils = {
     createQuestion,
     createExpert,
-    createProposal
+    createProposal,
+    getMyAddress,
+    setMyAddress
 };
 
 export default Utils;

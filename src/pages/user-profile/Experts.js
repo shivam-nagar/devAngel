@@ -8,7 +8,9 @@ import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
 
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import Utils from 'utils/utils';
+import axios from 'axios';
 
 import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
@@ -19,28 +21,44 @@ import { Avatar, FormControl, Container, Stack, Grid } from '../../../node_modul
 // ==============================|| SAMPLE PAGE ||============================== //
 
 const tags = ['Polygon', 'Huddle01'];
-const experts = [
-    Utils.createExpert(121, avatar1, 'Jane Doe', 'Some Descrption', ['Huddle01', 'polygon'], 220, ['expert']),
-    Utils.createExpert(122, avatar2, 'Jane Doe', 'Some Descrption', ['Huddle01', 'polygon'], 220, ['expert']),
-    Utils.createExpert(123, avatar3, 'Jane Doe', 'Some Descrption', ['Huddle01', 'polygon'], 220, ['expert']),
-    Utils.createExpert(124, avatar4, 'Jane Doe', 'Some Descrption', ['Huddle01', 'polygon'], 220, ['expert']),
-    Utils.createExpert(125, avatar1, 'Jane Doe', 'Some Descrption', ['Huddle01', 'polygon'], 220, ['expert']),
-    Utils.createExpert(126, avatar3, 'Jane Doe', 'Some Descrption', ['Huddle01', 'polygon'], 220, ['expert']),
-    Utils.createExpert(127, avatar2, 'John Doe', 'Some Descrption', ['polygon'], 20, ['amature', 'curious'])
-];
+
 const Experts = () => {
+    const [expertsList, setExpertsList] = useState([]);
+    const [fetchState, setFetchState] = useState(false);
+    async function getExperts() {
+        try {
+            const response = await axios.post('https://api.studio.thegraph.com/query/21552/devangel/0.2', {
+                query: `{
+                    userUpdateds(first: 5) {
+                        id
+                        userAddress
+                        name
+                        pictureCID
+                        rating
+                        reputation
+                    }
+                }`
+            });
+            setExpertsList(response.data.data.userUpdateds);
+            setFetchState(true);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    if (!fetchState) getExperts();
+
     const navigate = useNavigate();
     return (
         <Grid container spacing={2}>
-            {experts.map((expert, index) => {
+            {expertsList.map((expert, index) => {
                 return (
-                    <Grid item>
+                    <Grid item key={expert.id}>
                         <Card sx={{ maxWidth: 300, minWidth: 300 }} style={{ flex: 1 }}>
                             <CardHeader
                                 style={{ cursor: 'pointer' }}
                                 avatar={
-                                    <Avatar src={expert.image} aria-label="profile">
-                                        R
+                                    <Avatar src={expert.pictureCID} aria-label="profile">
+                                        {expert.name[0]}
                                     </Avatar>
                                 }
                                 title={
@@ -48,7 +66,7 @@ const Experts = () => {
                                         {expert.name}
                                     </Typography>
                                 }
-                                subheader={expert.points}
+                                subheader={'Reputation: ' + expert.reputation}
                                 onClick={() => navigate(`/profile/${expert.id}`)}
                             />
                             <CardContent>
