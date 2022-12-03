@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 
 // material-ui
 import { Typography } from '@mui/material';
@@ -47,7 +48,36 @@ const tags = ['Polygon', 'Huddle01'];
 
 const Question = () => {
     let { id } = useParams();
-    const question = Utils.createQuestion(123, 'the title issfor the quesiotin', 'seome descriptions is valid', [123, 125], 0, ['Polygon']);
+    const questionID = id;
+
+    const [question, setQuestion] = useState({});
+    const [fetchState, setFetchState] = useState(false);
+
+    async function getQuestion() {
+        try {
+            const response = await axios.post(Utils.graphAPI, {
+                query: `{
+                    questionUpdateds(questionId:"${questionID}", first: 50) {
+                        id
+                        creator
+                        questionId
+                        title
+                        description
+                        bounty
+                    }
+                }`
+            });
+            setQuestion(response.data.data.questionUpdateds[0]);
+            setFetchState(true);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    if (!fetchState) {
+        getQuestion();
+    }
+
+    // const question = Utils.createQuestion(123, 'the title issfor the quesiotin', 'seome descriptions is valid', [123, 125], 0, ['Polygon']);
     const proposals = [Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123)];
 
     const [questionStatus, setQuestionStatus] = useState(question.status);
@@ -63,9 +93,9 @@ const Question = () => {
         setShowHuddle(true);
     }
 
-    function getProposalCard(proposal) {
+    function getProposalCard(proposal, index) {
         return (
-            <Grid item m={3}>
+            <Grid item m={3} key={proposal.id + index}>
                 <Card style={{ minWidth: 300 }} key={proposal.id}>
                     <CardContent>
                         <Grid container spacing={2}>
@@ -98,7 +128,7 @@ const Question = () => {
                     <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
                             <Stack>
-                                {question.proposals.length == 0 ? (
+                                {question.proposals?.length == 0 ? (
                                     <Typography variant="caption" color="secondary" noWrap>
                                         No proposals recieved so far.
                                     </Typography>
@@ -155,11 +185,15 @@ const Question = () => {
                         <Typography variant="h2" mb={2}>
                             {question.title}
                         </Typography>
-                        <Grid container>
-                            {question.tags.map((tag) => {
-                                return <Chip avatar={<Avatar>{tag[0]}</Avatar>} label={tag} />;
-                            })}
-                        </Grid>
+                        {question.tags ? (
+                            <Grid container>
+                                {question.tags.map((tag) => {
+                                    return <Chip avatar={<Avatar>{tag[0]}</Avatar>} label={tag} />;
+                                })}
+                            </Grid>
+                        ) : (
+                            <></>
+                        )}
                         <Typography variant="h5" mt={1}>
                             {question.description}
                         </Typography>

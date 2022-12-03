@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Utils from 'utils/utils';
 import axios from 'axios';
+import { VideoCameraOutlined, MessageOutlined } from '@ant-design/icons';
 
 import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
@@ -66,17 +67,16 @@ const Experts = () => {
                                         {expert.name}
                                     </Typography>
                                 }
-                                subheader={'Reputation: ' + expert.reputation}
+                                subheader={`Reputation: ${expert.reputation} | Rating: ${expert.rating}/10`}
                                 onClick={() => navigate(`/profile/${expert.id}`)}
                             />
-                            <CardContent>
-                                <Typography variant="body2" color="text.secondary">
-                                    {expert.description}
-                                </Typography>
-                            </CardContent>
                             <CardActions>
-                                <Button size="small">Schedule</Button>
-                                <Button size="small"></Button>
+                                <Button size="small" variant="outlined" startIcon={<MessageOutlined />} style={{ cursor: 'pointer' }}>
+                                    Chat
+                                </Button>
+                                <Button size="small" variant="outlined" startIcon={<VideoCameraOutlined />} style={{ cursor: 'pointer' }}>
+                                    Huddle
+                                </Button>
                             </CardActions>
                         </Card>
                     </Grid>

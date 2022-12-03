@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 
+import { VideoCameraOutlined, MessageOutlined } from '@ant-design/icons';
 // project import
 import MainCard from 'components/MainCard';
 import {
@@ -20,7 +21,9 @@ import {
     InputLabel,
     Input,
     FormHelperText,
-    Badge
+    Badge,
+    CardActions,
+    CardContent
 } from '../../../node_modules/@mui/material/index';
 
 import avatar1 from 'assets/images/users/avatar-1.png';
@@ -91,30 +94,31 @@ const UserProfile = (userId) => {
     return (
         <>
             <MainCard sx={{ mt: 0 }}>
-                <Stack spacing={3}>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& .MuiTextField-root': { m: 1, width: '90%' }
-                        }}
-                    >
-                        <Grid container spacing={2}>
-                            <Grid item xs={0}>
-                                <Avatar alt={userDetails.name} src={userDetails.pictureCID} sx={{ width: 56, height: 56 }} />
-                            </Grid>
-                            <Grid item xs={11}>
-                                <Typography variant="h1">{userDetails.name}</Typography>
-                            </Grid>
-                            <Grid item xs={11}>
-                                <Typography variant="h5">
-                                    Reputation : {userDetails.reputation} &nbsp; | &nbsp; Rating : {userDetails.rating}/10
-                                </Typography>
-                            </Grid>
+                <CardContent>
+                    <Grid container spacing={2}>
+                        <Grid item xs={0}>
+                            <Avatar alt={userDetails.name} src={userDetails.pictureCID} sx={{ width: 56, height: 56 }} />
                         </Grid>
-                    </Box>
-                </Stack>
+                        <Grid item xs={11}>
+                            <Typography variant="h1">{userDetails.name}</Typography>
+                        </Grid>
+                        <Grid item xs={11}>
+                            <Typography variant="h5">
+                                Reputation : {userDetails.reputation} &nbsp; | &nbsp; Rating : {userDetails.rating}/10
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <CardActions>
+                    <Button size="small" variant="outlined" startIcon={<MessageOutlined />} style={{ cursor: 'pointer' }}>
+                        Chat
+                    </Button>
+                    <Button size="small" variant="outlined" startIcon={<VideoCameraOutlined />} style={{ cursor: 'pointer' }}>
+                        Huddle
+                    </Button>
+                </CardActions>
             </MainCard>
-            <MainCard sx={{ mt: 3 }} title="My Questions">
+            <MainCard sx={{ mt: 3 }} title={userDetails.name + "'s Questions"}>
                 <QuestionsTable items={userQuestions}></QuestionsTable>
             </MainCard>
         </>
