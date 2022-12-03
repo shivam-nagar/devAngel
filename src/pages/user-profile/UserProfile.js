@@ -100,7 +100,7 @@ const UserProfile = (userId) => {
                     >
                         <Grid container spacing={2}>
                             <Grid item xs={0}>
-                                <Avatar alt="Remy Sharp" src={userDetails.pictureCID} sx={{ width: 56, height: 56 }} />
+                                <Avatar alt={userDetails.name} src={userDetails.pictureCID} sx={{ width: 56, height: 56 }} />
                             </Grid>
                             <Grid item xs={11}>
                                 <Typography variant="h1">{userDetails.name}</Typography>
