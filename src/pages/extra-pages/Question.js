@@ -28,7 +28,8 @@ import {
     CardContent,
     CardActionArea,
     CardActions,
-    CardHeader
+    CardHeader,
+    Paper
 } from '../../../node_modules/@mui/material/index';
 import Chip from '@mui/material/Chip';
 
@@ -118,8 +119,8 @@ const Question = () => {
                 <CardHeader
                     avatar={<Avatar aria-label="recipe" src={avatar1}></Avatar>}
                     action={
-                        <Button variant="outlined" aria-label="settings" onClick={startHuddle}>
-                            Huddle
+                        <Button variant="contained" aria-label="settings" onClick={startHuddle}>
+                            Start Huddle
                         </Button>
                     }
                     title="Connected to Jane Doe"
@@ -132,15 +133,9 @@ const Question = () => {
                                 <Chat></Chat>
                             </Grid>
                         </Grid>
-                        {showHuddle ? (
-                            <Grid container style={{ width: 'calc( 100% - 380px )' }}>
-                                <Grid item>
-                                    <HuddleApp></HuddleApp>
-                                </Grid>
-                            </Grid>
-                        ) : (
-                            <></>
-                        )}
+                        <Grid container style={{ width: 'calc( 100% - 380px )' }}>
+                            <Grid item>{showHuddle ? <HuddleApp></HuddleApp> : <></>}</Grid>
+                        </Grid>
                     </Stack>
                 </CardContent>
             </Card>
