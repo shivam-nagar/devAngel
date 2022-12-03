@@ -23,7 +23,8 @@ import {
     FormHelperText,
     Badge,
     CardActions,
-    CardContent
+    CardContent,
+    Alert
 } from '../../../node_modules/@mui/material/index';
 
 import avatar1 from 'assets/images/users/avatar-1.png';
@@ -45,11 +46,23 @@ const UserProfile = (userId) => {
     const [userQuestions, setUserQuestions] = useState([]);
     const [fetchState, setFetchState] = useState(false);
 
+    if(!Utils.getMyAddress()) {
+        return (
+            <MainCard sx={{ mt: 0 }}>
+                <CardContent>
+                    <Alert severity="error">
+                        <Typography variant="h5">Connect wallet to access your profile</Typography>
+                    </Alert>
+                </CardContent>
+            </MainCard>
+        )
+    }
+
     async function getUserDetails() {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    userUpdateds(userAddress:"${userId}", first: 5) {
+                    userUpdateds(where: { id:"${userId}"}, first: 5) {
                         id
                         userAddress
                         name
@@ -60,13 +73,12 @@ const UserProfile = (userId) => {
                 }`
             });
             setUserDetails(response.data.data.userUpdateds[0]);
-            setFetchState(true);
         } catch (error) {
             console.error(error);
         }
     }
 
-    async function getUserQuestions() {
+    async function getUserQuestions(userId) {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
@@ -81,14 +93,14 @@ const UserProfile = (userId) => {
                 }`
             });
             setUserQuestions(response.data.data.questionUpdateds);
-            setFetchState(true);
         } catch (error) {
             console.error(error);
         }
     }
     if (!fetchState) {
         getUserDetails();
-        getUserQuestions();
+        getUserQuestions(userDetails.userAddress);
+        setFetchState(true);
     }
 
     return (

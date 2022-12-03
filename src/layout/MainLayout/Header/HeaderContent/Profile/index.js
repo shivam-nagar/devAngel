@@ -28,6 +28,7 @@ import SettingTab from './SettingTab';
 // assets
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import Utils from 'utils/utils';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -61,26 +62,24 @@ const Profile = () => {
 
     const anchorRef = useRef(null);
     const [open, setOpen] = useState(false);
-    const [address, setAddress] = useState('');
+    const [address, setAddress] = useState(Utils.getMyAddress());
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
         if (window.ethereum) {
-            if  (address === '') {
-                window.ethereum
-                  .request({ method: "eth_requestAccounts" })
-                  .then((res) => accountChangeHandler(res[0]));
+            if (address === null) {
+                window.ethereum.request({ method: 'eth_requestAccounts' }).then((res) => accountChangeHandler(res[0]));
             } else {
-                setAddress('');
+                setAddress(null);
             }
-          } else {
-            alert("install metamask extension!!");
-          }
+        } else {
+            alert('install metamask extension!!');
+        }
     };
 
-  const accountChangeHandler = (account) => {
-    setAddress(account);
-    setMyAddress(account);
-  };
+    const accountChangeHandler = (account) => {
+        setAddress(account);
+        Utils.setMyAddress(account);
+    };
 
     const handleClose = (event) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
@@ -112,7 +111,11 @@ const Profile = () => {
                 onClick={handleToggle}
             >
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-                    {address === '' ? <Typography variant="subtitle1">Connect Wallet</Typography> :  <Typography variant="subtitle1">Disconnect Wallet</Typography>}
+                    {address === '' ? (
+                        <Typography variant="subtitle1">Connect Wallet</Typography>
+                    ) : (
+                        <Typography variant="subtitle1">Disconnect Wallet</Typography>
+                    )}
                 </Stack>
             </ButtonBase>
             <Popper
@@ -153,9 +156,9 @@ const Profile = () => {
                                             <Grid container justifyContent="space-between" alignItems="center">
                                                 <Grid item>
                                                     <Stack direction="row" spacing={1.25} alignItems="center">
-                                                            <Typography variant="body2" color="textSecondary">
-                                                                {address}
-                                                            </Typography>
+                                                        <Typography variant="body2" color="textSecondary">
+                                                            {address}
+                                                        </Typography>
                                                     </Stack>
                                                 </Grid>
                                             </Grid>

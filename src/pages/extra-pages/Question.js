@@ -51,13 +51,15 @@ const Question = () => {
     const questionID = id;
 
     const [question, setQuestion] = useState({});
+    const [creator, setCreator] = useState();
+    const [proposals, setProposals] = useState([]);
     const [fetchState, setFetchState] = useState(false);
 
     async function getQuestion() {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    questionUpdateds(questionId:"${questionID}", first: 50) {
+                    questionUpdateds(questionId: "${questionID}", first: 50) {
                         id
                         creator
                         questionId
@@ -68,19 +70,52 @@ const Question = () => {
                 }`
             });
             setQuestion(response.data.data.questionUpdateds[0]);
-            setFetchState(true);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async function getCreator(creatorId) {
+        try {
+            const response = await axios.post(Utils.graphAPI, {
+                query: `{
+                    userUpdateds(userAddress: "${creatorId}" , first: 50) {
+                        id
+                        userAddress
+                        name
+                        pictureCID
+                        rating
+                        reputation
+                    }
+                }`
+            });
+            setCreator(response.data.data.userUpdateds[0]);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async function getProposals(questionId) {
+        try {
+            // TODO: get proposals
+            setProposals([]);
         } catch (error) {
             console.error(error);
         }
     }
     if (!fetchState) {
         getQuestion();
+        getCreator(question.creator);
+        getProposals(question.id);
+
+        if(proposals.length > 0) {
+            setQuestionStatus(1);
+        }
+        setFetchState(true);
     }
 
     // const question = Utils.createQuestion(123, 'the title issfor the quesiotin', 'seome descriptions is valid', [123, 125], 0, ['Polygon']);
-    const proposals = [Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123)];
+    // const proposals = [Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123)];
 
-    const [questionStatus, setQuestionStatus] = useState(question.status);
+    const [questionStatus, setQuestionStatus] = useState(0);
     const [showHuddle, setShowHuddle] = useState(false);
 
     function startChat(question, proposal) {
@@ -128,8 +163,8 @@ const Question = () => {
                     <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
                             <Stack>
-                                {question.proposals?.length == 0 ? (
-                                    <Typography variant="caption" color="secondary" noWrap>
+                                {proposals.length == 0 ? (
+                                    <Typography variant="subtitle1" color="secondary" noWrap>
                                         No proposals recieved so far.
                                     </Typography>
                                 ) : (
@@ -176,31 +211,43 @@ const Question = () => {
         <>
             <MainCard sx={{ mt: 0 }}>
                 <Stack spacing={3}>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& .MuiTextField-root': { m: 1, width: '90%' }
-                        }}
-                    >
-                        <Typography variant="h2" mb={2}>
-                            {question.title}
-                        </Typography>
-                        {question.tags ? (
-                            <Grid container>
-                                {question.tags.map((tag) => {
-                                    return <Chip avatar={<Avatar>{tag[0]}</Avatar>} label={tag} />;
-                                })}
+                    <Typography variant="h3" mb={0}>
+                        {question.title}
+                    </Typography>
+                    {question.tags ? (
+                        <Grid container>
+                            {question.tags.map((tag) => {
+                                return <Chip avatar={<Avatar>{tag[0]}</Avatar>} label={tag} />;
+                            })}
+                        </Grid>
+                    ) : (
+                        <></>
+                    )}
+                    <Typography variant="subtitle1" mt={0}>
+                        {question.description}
+                    </Typography>
+                    <Typography variant="body1" mt={0}>
+                        Bounty: {question.bounty} USDT
+                    </Typography>
+                    {creator ? (
+                    <Stack>
+                        <Grid container spacing={1}>
+                            <Grid item>
+                                <Avatar src={creator.pictureCID} alt={creator.name} style={{ width: '32px', height: '32px' }}></Avatar>
                             </Grid>
-                        ) : (
-                            <></>
-                        )}
-                        <Typography variant="h5" mt={1}>
-                            {question.description}
-                        </Typography>
-                    </Box>
+                            <Grid item mt={1}>
+                                <Typography variant="h5" mt={0}>
+                                    {creator.name}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid item mt={1}>
+                            <Typography variant="body1"> Rating: {creator.rating}/10 &nbsp; | &nbsp; Reputation: {creator.reputation} points</Typography>
+                        </Grid>
+                    </Stack>) : <></>}
                 </Stack>
             </MainCard>
-            {questionStatus != 1 ? showProposals() : showVideoCall()}
+            {questionStatus == 1 ? showVideoCall() : showProposals() }
         </>
     );
 };

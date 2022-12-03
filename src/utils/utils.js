@@ -10,7 +10,7 @@ function createProposal(id, qid, eid) {
     return { id, qid, eid };
 }
 
-let myAddress = '';
+let myAddress = null;
 function getMyAddress() {
     return myAddress;
 }

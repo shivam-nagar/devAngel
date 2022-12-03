@@ -17,12 +17,14 @@ import {
     FormHelperText
 } from '../../../node_modules/@mui/material/index';
 import Multiselect from 'multiselect-react-dropdown';
-
+import Utils from 'utils/utils';
 import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
 import { FormControl } from '../../../node_modules/@mui/material/index';
+import { CardContent } from '../../../node_modules/@mui/material/index';
+import { Alert } from '../../../node_modules/@mui/material/index';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -37,6 +39,19 @@ const AskQuestion = () => {
     function onSelect(selectedList, selectedItem) {}
 
     function onRemove(selectedList, removedItem) {}
+
+    if(!Utils.getMyAddress()) {
+        return (
+            <MainCard sx={{ mt: 0 }}>
+                <CardContent>
+                    <Alert severity="error">
+                        <Typography variant="h5">Connect your wallet to access questions </Typography>
+                    </Alert>
+                </CardContent>
+            </MainCard>
+        )
+    }
+
 
     return (
         <>

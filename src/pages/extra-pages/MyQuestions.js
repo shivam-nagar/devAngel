@@ -7,6 +7,7 @@ import QuestionsTable from './QuestionsTable';
 
 import { useState } from 'react';
 import axios from 'axios';
+import { Alert, CardContent } from '../../../node_modules/@mui/material/index';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -15,11 +16,23 @@ const MyQuestions = () => {
     const [fetchState, setFetchState] = useState(false);
     const userId = Utils.getMyAddress();
 
+    if(!Utils.getMyAddress()) {
+        return (
+            <MainCard sx={{ mt: 0 }}>
+                <CardContent>
+                    <Alert severity="error">
+                        <Typography variant="h5">Connect your wallet to access questions </Typography>
+                    </Alert>
+                </CardContent>
+            </MainCard>
+        )
+    }
+
     async function getUserQuestions() {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    questionUpdateds(creator:"${userId}", first: 50) {
+                    questionUpdateds(where: { creator:"${userId}"}, first: 50) {
                         id
                         creator
                         questionId
@@ -41,7 +54,7 @@ const MyQuestions = () => {
 
     return (
         <MainCard>
-            <QuestionsTable items={latestQuestions} />
+            <QuestionsTable items={myQuestions} />
         </MainCard>
     );
 };
