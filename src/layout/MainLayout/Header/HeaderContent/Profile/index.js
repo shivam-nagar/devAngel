@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
-
+import { ethers }  from 'ethers';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -24,10 +24,13 @@ import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
+import Utils from 'utils/utils';
 
 // assets
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+
+const devAngelABI = require("smart-contract/ABI.json");
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -61,7 +64,7 @@ const Profile = () => {
 
     const anchorRef = useRef(null);
     const [open, setOpen] = useState(false);
-    const [address, setAddress] = useState('');
+    const [address, setAddress] = useState(Utils.getMyAddress());
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
         if (window.ethereum) {
@@ -77,9 +80,25 @@ const Profile = () => {
           }
     };
 
-  const accountChangeHandler = (account) => {
+  const accountChangeHandler = async (account) => {
     setAddress(account);
-    setMyAddress(account);
+    Utils.setMyAddress(account);
+
+    // Connect to the network
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const accounts = await ethereum.request({ method: 'eth_accounts' });
+    const signer = provider.getSigner(accounts[0]);
+    let DEV_ANGEL_CONTRACT_ADDRESS = '0xC7970e9C5AA18a7A9Bf21C322BFa8eceBE7B7A26';
+    let devAngelContract = new ethers.Contract(DEV_ANGEL_CONTRACT_ADDRESS, devAngelABI, signer);
+
+    console.log("Asking..");
+    let txReceipt = await devAngelContract.askQuestion(address, "Test Question 1", "Test Description 1", ["web3"], 10);
+    const link = "https://goerli.etherscan.io/tx/"+txReceipt.hash;
+    console.log(link);
+    alert(link);
+    let result = await txReceipt.wait(1)
+    console.log(result);
+
   };
 
     const handleClose = (event) => {
