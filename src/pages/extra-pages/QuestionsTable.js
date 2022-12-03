@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { Box, Link, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
@@ -101,16 +101,16 @@ const OrderStatus = ({ status }) => {
 
     switch (status) {
         case 0:
-            color = 'warning';
-            title = 'Pending';
+            color = 'info';
+            title = 'Scheduled';
             break;
         case 1:
             color = 'success';
-            title = 'Approved';
+            title = 'Answered';
             break;
         case 2:
-            color = 'error';
-            title = 'Rejected';
+            color = 'warning';
+            title = 'Awaiting';
             break;
         default:
             color = 'primary';
@@ -132,8 +132,9 @@ OrderStatus.propTypes = {
 // ==============================|| ORDER TABLE ||============================== //
 
 export default function QuestionsTable(params) {
-    rows = params.userData || rows;
-    console.log(rows);
+    const navigate = useNavigate();
+
+    rows = params.items || rows;
     const [order] = useState('asc');
     const [orderBy] = useState('trackingNo');
     const [selected] = useState([]);
@@ -141,6 +142,11 @@ export default function QuestionsTable(params) {
     const isSelected = (trackingNo) => selected.indexOf(trackingNo) !== -1;
 
     const [selectedRow, setSelectedRow] = useState(0);
+
+    function setRow(index) {
+        setSelectedRow(index);
+        navigate(`/question/${rows[index].id}`);
+    }
 
     return (
         <Box>
@@ -170,7 +176,6 @@ export default function QuestionsTable(params) {
                         {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
                             const isItemSelected = isSelected(row.trackingNo);
                             const labelId = `enhanced-table-checkbox-${index}`;
-
                             return (
                                 <TableRow
                                     hover
@@ -178,13 +183,13 @@ export default function QuestionsTable(params) {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     aria-checked={isItemSelected}
                                     tabIndex={-1}
-                                    key={row.trackingNo}
+                                    key={row.title + index}
                                     selected={isItemSelected}
-                                    onClick={() => setSelectedRow(index)}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => setRow(index)}
                                 >
-                                    <TableCell align="left">
+                                    <TableCell style={{ width: '70%' }} align="left">
                                         {row.title}
-                                        {selectedRow == index ? <Box> {row.description} </Box> : null}
                                     </TableCell>
                                     <TableCell align="right">{row.proposals}</TableCell>
                                     <TableCell align="left">

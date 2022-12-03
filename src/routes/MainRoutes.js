@@ -11,6 +11,7 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
 const MyQuestions = Loadable(lazy(() => import('pages/extra-pages/MyQuestions')));
 const AskQuestion = Loadable(lazy(() => import('pages/extra-pages/AskQuestion')));
+const Question = Loadable(lazy(() => import('pages/extra-pages/Question')));
 
 // render - Profiles
 const UserProfile = Loadable(lazy(() => import('pages/user-profile/UserProfile')));
@@ -58,8 +59,16 @@ const MainRoutes = {
             element: <AskQuestion />
         },
         {
-            path: 'my-profile',
+            path: 'profile/:id',
             element: <UserProfile />
+        },
+        {
+            path: 'profile',
+            element: <UserProfile />
+        },
+        {
+            path: 'question/:id',
+            element: <Question />
         },
         {
             path: 'experts',

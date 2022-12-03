@@ -18,7 +18,7 @@ const profiles = {
             id: 'my-profile',
             title: 'My Profile',
             type: 'item',
-            url: '/my-profile',
+            url: '/profile',
             icon: icons.UserOutlined,
             breadcrumbs: true
         },
