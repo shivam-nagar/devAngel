@@ -14,6 +14,14 @@ const questions = {
     type: 'group',
     children: [
         {
+            id: 'ask-question',
+            title: 'Ask Question',
+            type: 'item',
+            url: '/ask-question',
+            icon: icons.DashboardOutlined,
+            breadcrumbs: true
+        },
+        {
             id: 'my-questions',
             title: 'My Questions',
             type: 'item',

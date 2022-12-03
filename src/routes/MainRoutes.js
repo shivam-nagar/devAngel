@@ -10,6 +10,7 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 // render - sample page
 const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
 const MyQuestions = Loadable(lazy(() => import('pages/extra-pages/MyQuestions')));
+const AskQuestion = Loadable(lazy(() => import('pages/extra-pages/AskQuestion')));
 
 // render - utilities
 const Typography = Loadable(lazy(() => import('pages/components-overview/Typography')));
@@ -47,6 +48,10 @@ const MainRoutes = {
         {
             path: 'my-questions',
             element: <MyQuestions />
+        },
+        {
+            path: 'ask-question',
+            element: <AskQuestion />
         },
         {
             path: 'shadow',
