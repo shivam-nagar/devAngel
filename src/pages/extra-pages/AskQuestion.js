@@ -29,7 +29,7 @@ const tags = ['Polygon', 'Huddle01'];
 
 const AskQuestion = () => (
     <>
-        <MainCard title="Ask Question" sx={{ mt: 0 }}>
+        <MainCard sx={{ mt: 0 }}>
             <Stack spacing={3}>
                 <Box
                     component="form"

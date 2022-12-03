@@ -16,18 +16,7 @@ function createData(title, description, proposals, status) {
     return { title, description, proposals, status };
 }
 
-const rows = [
-    createData('Camera Lens', 'Question description', 40, 2),
-    createData('Laptop', 'Question description', 300, 0),
-    createData('Mobile', 'Question description', 355, 1),
-    createData('Handset', 'Question description', 50, 1),
-    createData('Computer Accessories', 'Question description', 100, 1),
-    createData('TV', 'Question description', 99, 0),
-    createData('Keyboard', 'Question description', 125, 2),
-    createData('Mouse', 'Question description', 89, 2),
-    createData('Desktop', 'Question description', 185, 1),
-    createData('Chair', 'Question description', 100, 1)
-];
+let rows = [];
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -142,7 +131,9 @@ OrderStatus.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function QuestionsTable() {
+export default function QuestionsTable(params) {
+    rows = params.userData || rows;
+    console.log(rows);
     const [order] = useState('asc');
     const [orderBy] = useState('trackingNo');
     const [selected] = useState([]);

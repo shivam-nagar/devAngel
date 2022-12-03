@@ -1,15 +1,16 @@
 // assets
-import { DashboardOutlined } from '@ant-design/icons';
+import { QuestionOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
 // icons
 const icons = {
-    DashboardOutlined
+    QuestionOutlined,
+    QuestionCircleOutlined
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
 
 const questions = {
-    id: 'group-dashboard',
+    id: 'group-questions',
     title: 'Questions',
     type: 'group',
     children: [
@@ -18,7 +19,7 @@ const questions = {
             title: 'Ask Question',
             type: 'item',
             url: '/ask-question',
-            icon: icons.DashboardOutlined,
+            icon: icons.QuestionOutlined,
             breadcrumbs: true
         },
         {
@@ -26,8 +27,8 @@ const questions = {
             title: 'My Questions',
             type: 'item',
             url: '/my-questions',
-            icon: icons.DashboardOutlined,
-            breadcrumbs: false
+            icon: icons.QuestionCircleOutlined,
+            breadcrumbs: true
         }
     ]
 };

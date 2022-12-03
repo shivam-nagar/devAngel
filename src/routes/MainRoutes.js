@@ -12,6 +12,10 @@ const SamplePage = Loadable(lazy(() => import('pages/extra-pages/SamplePage')));
 const MyQuestions = Loadable(lazy(() => import('pages/extra-pages/MyQuestions')));
 const AskQuestion = Loadable(lazy(() => import('pages/extra-pages/AskQuestion')));
 
+// render - Profiles
+const UserProfile = Loadable(lazy(() => import('pages/user-profile/UserProfile')));
+const Experts = Loadable(lazy(() => import('pages/user-profile/Experts')));
+
 // render - utilities
 const Typography = Loadable(lazy(() => import('pages/components-overview/Typography')));
 const Color = Loadable(lazy(() => import('pages/components-overview/Color')));
@@ -52,6 +56,14 @@ const MainRoutes = {
         {
             path: 'ask-question',
             element: <AskQuestion />
+        },
+        {
+            path: 'my-profile',
+            element: <UserProfile />
+        },
+        {
+            path: 'experts',
+            element: <Experts />
         },
         {
             path: 'shadow',

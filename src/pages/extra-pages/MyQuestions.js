@@ -8,7 +8,7 @@ import QuestionsTable from './QuestionsTable';
 // ==============================|| SAMPLE PAGE ||============================== //
 
 const MyQuestions = () => (
-    <MainCard title="My Questions">
+    <MainCard>
         <QuestionsTable />
     </MainCard>
 );
