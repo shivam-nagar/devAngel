@@ -59,7 +59,7 @@ const Question = () => {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    questionUpdateds(questionId: "${questionID}", first: 50) {
+                    questionUpdateds(where: { questionId: "${questionID}"}, first: 50) {
                         id
                         creator
                         questionId
@@ -70,6 +70,7 @@ const Question = () => {
                 }`
             });
             setQuestion(response.data.data.questionUpdateds[0]);
+            return response.data.data.questionUpdateds[0];
         } catch (error) {
             console.error(error);
         }
@@ -78,7 +79,7 @@ const Question = () => {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    userUpdateds(userAddress: "${creatorId}" , first: 50) {
+                    userUpdateds(where: { userAddress: "${creatorId}"}, first: 50) {
                         id
                         userAddress
                         name
@@ -89,6 +90,7 @@ const Question = () => {
                 }`
             });
             setCreator(response.data.data.userUpdateds[0]);
+            return response.data.data.userUpdateds[0];
         } catch (error) {
             console.error(error);
         }
@@ -96,15 +98,17 @@ const Question = () => {
     async function getProposals(questionId) {
         try {
             // TODO: get proposals
-            setProposals([]);
+            setProposals(dummy_proposals);
         } catch (error) {
             console.error(error);
         }
     }
     if (!fetchState) {
-        getQuestion();
-        getCreator(question.creator);
-        getProposals(question.id);
+        getQuestion().then((question) => {
+            console.log(question);
+            getCreator(question.creator);
+            getProposals(question.id);    
+        });
 
         if(proposals.length > 0) {
             setQuestionStatus(1);
@@ -113,7 +117,7 @@ const Question = () => {
     }
 
     // const question = Utils.createQuestion(123, 'the title issfor the quesiotin', 'seome descriptions is valid', [123, 125], 0, ['Polygon']);
-    // const proposals = [Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123)];
+    const dummy_proposals = [Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123)];
 
     const [questionStatus, setQuestionStatus] = useState(0);
     const [showHuddle, setShowHuddle] = useState(false);
@@ -130,7 +134,7 @@ const Question = () => {
 
     function getProposalCard(proposal, index) {
         return (
-            <Grid item m={3} key={proposal.id + index}>
+            <Grid item m={1} key={proposal.id + index}>
                 <Card style={{ minWidth: 300 }} key={proposal.id}>
                     <CardContent>
                         <Grid container spacing={2}>

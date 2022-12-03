@@ -38,9 +38,9 @@ import QuestionsTable from '../extra-pages/QuestionsTable';
 // ==============================|| SAMPLE PAGE ||============================== //
 
 const tags = ['Polygon', 'Huddle01'];
-const UserProfile = (userId) => {
+const UserProfile = (userAddress) => {
     let { id } = useParams();
-    userId = id ? id : Utils.getMyAddress();
+    userAddress = id ? id : Utils.getMyAddress();
 
     const [userDetails, setUserDetails] = useState({});
     const [userQuestions, setUserQuestions] = useState([]);
@@ -62,7 +62,7 @@ const UserProfile = (userId) => {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    userUpdateds(where: { userAddress:"${userId}"}, first: 5) {
+                    userUpdateds(where: { userAddress: "${userAddress}"}, first: 5) {
                         id
                         userAddress
                         name
@@ -78,11 +78,11 @@ const UserProfile = (userId) => {
         }
     }
 
-    async function getUserQuestions(userId) {
+    async function getUserQuestions() {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    questionUpdateds(where { creator:"${userId}"}, first: 5) {
+                    questionUpdateds(where: {creator: "${userAddress}"}, first: 5) {
                         id
                         creator
                         questionId
@@ -99,7 +99,7 @@ const UserProfile = (userId) => {
     }
     if (!fetchState) {
         getUserDetails();
-        getUserQuestions(userDetails.userAddress);
+        getUserQuestions();
         setFetchState(true);
     }
 

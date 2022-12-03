@@ -145,7 +145,7 @@ export default function QuestionsTable(params) {
 
     function setRow(index) {
         setSelectedRow(index);
-        navigate(`/question/${rows[index].id}`);
+        navigate(`/question/${rows[index].questionId}`);
     }
 
     if(rows.length == 0) {
@@ -161,7 +161,7 @@ export default function QuestionsTable(params) {
             <TableContainer
                 sx={{
                     width: '100%',
-                    overflowX: 'auto',
+                    overflowX: 'hidden',
                     position: 'relative',
                     display: 'block',
                     maxWidth: '100%',
@@ -170,6 +170,7 @@ export default function QuestionsTable(params) {
             >
                 <Table
                     aria-labelledby="tableTitle"
+                    style={{ tableLayout: 'fixed' }}
                     sx={{
                         '& .MuiTableCell-root:first-child': {
                             pl: 2
@@ -196,12 +197,12 @@ export default function QuestionsTable(params) {
                                     style={{ cursor: 'pointer' }}
                                     onClick={() => setRow(index)}
                                 >
-                                    <TableCell style={{ width: '70%' }} align="left">
-                                        <Typography variant="h5">{row.title}</Typography>
-                                        <Typography variant="subtitle">{row.description}</Typography>
+                                    <TableCell style={{ overflow: 'hidden' }}>
+                                        <Typography variant="h5" fullwidth>{row.title}</Typography>
+                                        <Typography variant="subtitle" fullwidth>{row.description}</Typography>
                                     </TableCell>
                                     <TableCell align="right">{row.bounty} USDT</TableCell>
-                                    <TableCell align="left">
+                                    <TableCell align="right">
                                         <OrderStatus status={row.status} />
                                     </TableCell>
                                 </TableRow>
