@@ -19,7 +19,6 @@ const HeaderContent = () => {
         <>
             {!matchesXs && <Search />}
             {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
-            {Utils.getMyAddress()}
 
             <Notification />
             <Chat
