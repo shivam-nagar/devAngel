@@ -24,7 +24,8 @@ const Utils = {
     createExpert,
     createProposal,
     getMyAddress,
-    setMyAddress
+    setMyAddress,
+    graphAPI: 'https://api.studio.thegraph.com/query/21552/devangel/0.2'
 };
 
 export default Utils;

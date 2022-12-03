@@ -54,10 +54,10 @@ const headCells = [
         label: 'Title'
     },
     {
-        id: 'proposals',
+        id: 'Bounty',
         align: 'right',
         disablePadding: false,
-        label: 'Proposals'
+        label: 'Bounty'
     },
     {
         id: 'status',
@@ -113,8 +113,8 @@ const OrderStatus = ({ status }) => {
             title = 'Awaiting';
             break;
         default:
-            color = 'primary';
-            title = 'None';
+            color = 'warning';
+            title = 'Awaiting';
     }
 
     return (
@@ -189,9 +189,10 @@ export default function QuestionsTable(params) {
                                     onClick={() => setRow(index)}
                                 >
                                     <TableCell style={{ width: '70%' }} align="left">
-                                        {row.title}
+                                        <Typography variant="h5">{row.title}</Typography>
+                                        <Typography variant="subtitle">{row.description}</Typography>
                                     </TableCell>
-                                    <TableCell align="right">{row.proposals}</TableCell>
+                                    <TableCell align="right">{row.bounty} USDT</TableCell>
                                     <TableCell align="left">
                                         <OrderStatus status={row.status} />
                                     </TableCell>

@@ -27,7 +27,7 @@ const Experts = () => {
     const [fetchState, setFetchState] = useState(false);
     async function getExperts() {
         try {
-            const response = await axios.post('https://api.studio.thegraph.com/query/21552/devangel/0.2', {
+            const response = await axios.post(Utils.graphAPI, {
                 query: `{
                     userUpdateds(first: 5) {
                         id

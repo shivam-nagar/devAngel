@@ -3,6 +3,8 @@ import { Typography } from '@mui/material';
 import Utils from 'utils/utils';
 
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
 // project import
 import MainCard from 'components/MainCard';
@@ -34,27 +36,57 @@ import QuestionsTable from '../extra-pages/QuestionsTable';
 const tags = ['Polygon', 'Huddle01'];
 const UserProfile = (userId) => {
     let { id } = useParams();
+    userId = id ? id : Utils.getMyAddress();
 
-    console.log(id);
-    if (!id) {
-        userId = 123; // TODO: Current user id
+    const [userDetails, setUserDetails] = useState({});
+    const [userQuestions, setUserQuestions] = useState([]);
+    const [fetchState, setFetchState] = useState(false);
+
+    async function getUserDetails() {
+        try {
+            const response = await axios.post(Utils.graphAPI, {
+                query: `{
+                    userUpdateds(userAddress:"${userId}", first: 5) {
+                        id
+                        userAddress
+                        name
+                        pictureCID
+                        rating
+                        reputation
+                    }
+                }`
+            });
+            setUserDetails(response.data.data.userUpdateds[0]);
+            setFetchState(true);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    const user = {
-        image: avatar1,
-        name: 'username surname',
-        location: 'Bangalore, IN',
-        questions: [
-            Utils.createQuestion(1234, 'Camera Lens', 'Question description', 40, 2),
-            Utils.createQuestion(1234, 'Laptop', 'Question description', 300, 0),
-            Utils.createQuestion(1234, 'Mobile', 'Question description', 355, 1)
-        ],
-        answers: [
-            Utils.createQuestion(1234, 'yahoo', 'Question description', 355, 1),
-            Utils.createQuestion(1234, 'apple', 'Question description', 355, 1),
-            Utils.createQuestion(1234, 'google', 'Question description', 355, 1)
-        ]
-    };
+    async function getUserQuestions() {
+        try {
+            const response = await axios.post(Utils.graphAPI, {
+                query: `{
+                    questionUpdateds(creator:"${userId}", first: 5) {
+                        id
+                        creator
+                        questionId
+                        title
+                        description
+                        bounty
+                    }
+                }`
+            });
+            setUserQuestions(response.data.data.questionUpdateds);
+            setFetchState(true);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    if (!fetchState) {
+        getUserDetails();
+        getUserQuestions();
+    }
 
     return (
         <>
@@ -68,23 +100,22 @@ const UserProfile = (userId) => {
                     >
                         <Grid container spacing={2}>
                             <Grid item xs={0}>
-                                <Avatar alt="Remy Sharp" src={user.image} sx={{ width: 56, height: 56 }} />
+                                <Avatar alt="Remy Sharp" src={userDetails.pictureCID} sx={{ width: 56, height: 56 }} />
                             </Grid>
                             <Grid item xs={11}>
-                                <Typography variant="h1">{user.name}</Typography>
+                                <Typography variant="h1">{userDetails.name}</Typography>
                             </Grid>
                             <Grid item xs={11}>
-                                <Typography variant="h5">{user.location}</Typography>
+                                <Typography variant="h5">
+                                    Reputation : {userDetails.reputation} &nbsp; | &nbsp; Rating : {userDetails.rating}/10
+                                </Typography>
                             </Grid>
                         </Grid>
                     </Box>
                 </Stack>
             </MainCard>
             <MainCard sx={{ mt: 3 }} title="My Questions">
-                <QuestionsTable items={user.questions}></QuestionsTable>
-            </MainCard>
-            <MainCard sx={{ mt: 3 }} title="My Answers">
-                <QuestionsTable items={user.answers}></QuestionsTable>
+                <QuestionsTable items={userQuestions}></QuestionsTable>
             </MainCard>
         </>
     );
