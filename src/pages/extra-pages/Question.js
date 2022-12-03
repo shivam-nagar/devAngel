@@ -107,10 +107,10 @@ const Question = () => {
         getQuestion().then((question) => {
             console.log(question);
             getCreator(question.creator);
-            getProposals(question.id);    
+            getProposals(question.id);
         });
 
-        if(proposals.length > 0) {
+        if (proposals.length > 0) {
             setQuestionStatus(1);
         }
         setFetchState(true);
@@ -172,7 +172,18 @@ const Question = () => {
                                         No proposals recieved so far.
                                     </Typography>
                                 ) : (
-                                    <Grid container>{proposals.map(getProposalCard)}</Grid>
+                                    <Grid container>
+                                        {proposals.map(getProposalCard)}
+                                        <Grid item m={1} key={'dummy'}>
+                                            <Card style={{ minWidth: 300 }} key={'testcard'}>
+                                                <CardHeader title="Submit Proposal">
+                                                </CardHeader>
+                                                <CardActions>
+                                                    <Button size="small" variant="outlined">Propose</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid>
+                                    </Grid>
                                 )}
                             </Stack>
                         </Grid>
@@ -234,24 +245,30 @@ const Question = () => {
                         Bounty: {question.bounty} USDT
                     </Typography>
                     {creator ? (
-                    <Stack>
-                        <Grid container spacing={1}>
-                            <Grid item>
-                                <Avatar src={creator.pictureCID} alt={creator.name} style={{ width: '32px', height: '32px' }}></Avatar>
+                        <Stack>
+                            <Grid container spacing={1}>
+                                <Grid item>
+                                    <Avatar src={creator.pictureCID} alt={creator.name} style={{ width: '32px', height: '32px' }}></Avatar>
+                                </Grid>
+                                <Grid item mt={1}>
+                                    <Typography variant="h5" mt={0}>
+                                        {creator.name}
+                                    </Typography>
+                                </Grid>
                             </Grid>
                             <Grid item mt={1}>
-                                <Typography variant="h5" mt={0}>
-                                    {creator.name}
+                                <Typography variant="body1">
+                                    {' '}
+                                    Rating: {creator.rating}/10 &nbsp; | &nbsp; Reputation: {creator.reputation} points
                                 </Typography>
                             </Grid>
-                        </Grid>
-                        <Grid item mt={1}>
-                            <Typography variant="body1"> Rating: {creator.rating}/10 &nbsp; | &nbsp; Reputation: {creator.reputation} points</Typography>
-                        </Grid>
-                    </Stack>) : <></>}
+                        </Stack>
+                    ) : (
+                        <></>
+                    )}
                 </Stack>
             </MainCard>
-            {questionStatus == 1 ? showVideoCall() : showProposals() }
+            {questionStatus == 1 ? showVideoCall() : showProposals()}
         </>
     );
 };
