@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
-
+import { ethers } from 'ethers';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -29,6 +29,10 @@ import SettingTab from './SettingTab';
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import Utils from 'utils/utils';
+import { useNavigate } from 'react-router-dom';
+
+
+const devAngelABI = require('smart-contract/ABI.json');
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -55,9 +59,21 @@ function a11yProps(index) {
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
 const Profile = () => {
+    const navigate = useNavigate();
+    
     const theme = useTheme();
     const handleLogout = async () => {
-        setAddress('');
+        if (window.ethereum) {
+            if (address === null) {
+                window.ethereum.request({ method: 'eth_requestAccounts' }).then((res) => accountChangeHandler(res[0]));
+            } else {
+                setAddress(null);
+                Utils.setMyAddress(null);
+                window.location.reload(); 
+            }
+        } else {
+            alert('install metamask extension!!');
+        }
     };
 
     const anchorRef = useRef(null);
@@ -65,20 +81,28 @@ const Profile = () => {
     const [address, setAddress] = useState(Utils.getMyAddress());
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
-        if (window.ethereum) {
-            if (address === null) {
-                window.ethereum.request({ method: 'eth_requestAccounts' }).then((res) => accountChangeHandler(res[0]));
-            } else {
-                setAddress(null);
-            }
-        } else {
-            alert('install metamask extension!!');
-        }
     };
 
-    const accountChangeHandler = (account) => {
+    const accountChangeHandler = async (account) => {
         setAddress(account);
         Utils.setMyAddress(account);
+
+        navigate(window.location.pathname);
+
+        // Connect to the network
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const accounts = await ethereum.request({ method: 'eth_accounts' });
+        const signer = provider.getSigner(accounts[0]);
+        let DEV_ANGEL_CONTRACT_ADDRESS = '0xC7970e9C5AA18a7A9Bf21C322BFa8eceBE7B7A26';
+        let devAngelContract = new ethers.Contract(DEV_ANGEL_CONTRACT_ADDRESS, devAngelABI, signer);
+
+        console.log('Asking..');
+        let txReceipt = await devAngelContract.askQuestion(address, 'Test Question 1', 'Test Description 1', ['web3'], 10);
+        const link = 'https://goerli.etherscan.io/tx/' + txReceipt.hash;
+        console.log(link);
+        alert(link);
+        let result = await txReceipt.wait(1);
+        console.log(result);
     };
 
     const handleClose = (event) => {
@@ -97,6 +121,7 @@ const Profile = () => {
     const iconBackColorOpen = 'grey.300';
     return (
         <Box sx={{ flexShrink: 0, ml: 0.75 }}>
+            {address}
             <ButtonBase
                 sx={{
                     p: 0.25,
@@ -108,10 +133,10 @@ const Profile = () => {
                 ref={anchorRef}
                 aria-controls={open ? 'profile-grow' : undefined}
                 aria-haspopup="true"
-                onClick={handleToggle}
+                onClick={handleLogout}
             >
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-                    {address === '' ? (
+                    {address === null ? (
                         <Typography variant="subtitle1">Connect Wallet</Typography>
                     ) : (
                         <Typography variant="subtitle1">Disconnect Wallet</Typography>
@@ -166,7 +191,7 @@ const Profile = () => {
                                         {open && (
                                             <>
                                                 <TabPanel value={value} index={0} dir={theme.direction}>
-                                                    <ProfileTab handleLogout={handleToggle} />
+                                                    <ProfileTab handleLogout={handleLogout} />
                                                 </TabPanel>
                                                 <TabPanel value={value} index={1} dir={theme.direction}>
                                                     <SettingTab />

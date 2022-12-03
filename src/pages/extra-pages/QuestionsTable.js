@@ -148,6 +148,14 @@ export default function QuestionsTable(params) {
         navigate(`/question/${rows[index].id}`);
     }
 
+    if(rows.length == 0) {
+        return (
+            <Box>
+                No Items found
+            </Box>
+        )
+    }
+
     return (
         <Box>
             <TableContainer

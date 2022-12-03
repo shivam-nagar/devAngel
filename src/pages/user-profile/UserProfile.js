@@ -62,7 +62,7 @@ const UserProfile = (userId) => {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    userUpdateds(where: { id:"${userId}"}, first: 5) {
+                    userUpdateds(where: { userAddress:"${userId}"}, first: 5) {
                         id
                         userAddress
                         name
@@ -82,7 +82,7 @@ const UserProfile = (userId) => {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    questionUpdateds(creator:"${userId}", first: 5) {
+                    questionUpdateds(where { creator:"${userId}"}, first: 5) {
                         id
                         creator
                         questionId

@@ -8,6 +8,7 @@ import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 // assets
 import { EditOutlined, ProfileOutlined, LogoutOutlined, UserOutlined, WalletOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import Utils from 'utils/utils';
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
@@ -34,11 +35,11 @@ const ProfileTab = ({ handleLogout }) => {
                 </ListItemIcon>
                 <ListItemText primary="My Profile" />
             </ListItemButton>
-            <ListItemButton selected={selectedIndex === 1} onClick={handleLogout}>
+            <ListItemButton selected={selectedIndex === 2} onClick={handleLogout}>
                 <ListItemIcon>
                     <LogoutOutlined />
                 </ListItemIcon>
-                <ListItemText primary="Disconnect Wallet" />
+                <ListItemText primary={Utils.getMyAddress() ? "Disconnect Wallet" : "Connect Wallet"} />
             </ListItemButton>
         </List>
     );
