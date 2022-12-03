@@ -64,11 +64,14 @@ const Profile = () => {
     const [address, setAddress] = useState('');
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
-        if (window.ethereum && address === '') {
-            // res[0] for fetching a first wallet
-            window.ethereum
-              .request({ method: "eth_requestAccounts" })
-              .then((res) => accountChangeHandler(res[0]));
+        if (window.ethereum) {
+            if  (address === '') {
+                window.ethereum
+                  .request({ method: "eth_requestAccounts" })
+                  .then((res) => accountChangeHandler(res[0]));
+            } else {
+                setAddress('');
+            }
           } else {
             alert("install metamask extension!!");
           }
@@ -109,13 +112,12 @@ const Profile = () => {
                 onClick={handleToggle}
             >
                 <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-                    <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-                    <Typography variant="subtitle1">Connect Wallet</Typography>
+                    {address === '' ? <Typography variant="subtitle1">Connect Wallet</Typography> :  <Typography variant="subtitle1">Disconnect Wallet</Typography>}
                 </Stack>
             </ButtonBase>
             <Popper
                 placement="bottom-end"
-                open={false}
+                open={open}
                 anchorEl={anchorRef.current}
                 role={undefined}
                 transition
@@ -151,26 +153,17 @@ const Profile = () => {
                                             <Grid container justifyContent="space-between" alignItems="center">
                                                 <Grid item>
                                                     <Stack direction="row" spacing={1.25} alignItems="center">
-                                                        <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-                                                        <Stack>
-                                                            <Typography variant="h6">John Doe</Typography>
                                                             <Typography variant="body2" color="textSecondary">
-                                                                UI/UX Designer
+                                                                {address}
                                                             </Typography>
-                                                        </Stack>
                                                     </Stack>
-                                                </Grid>
-                                                <Grid item>
-                                                    <IconButton size="large" color="secondary" onClick={handleLogout}>
-                                                        <LogoutOutlined />
-                                                    </IconButton>
                                                 </Grid>
                                             </Grid>
                                         </CardContent>
                                         {open && (
                                             <>
                                                 <TabPanel value={value} index={0} dir={theme.direction}>
-                                                    <ProfileTab handleLogout={handleLogout} />
+                                                    <ProfileTab handleLogout={handleToggle} />
                                                 </TabPanel>
                                                 <TabPanel value={value} index={1} dir={theme.direction}>
                                                     <SettingTab />
