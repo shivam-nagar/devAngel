@@ -1,0 +1,24 @@
+type QuestionUpdated @entity(immutable: true) {
+  id: Bytes!
+  questionId: BigInt! # uint256
+  title: String! # string
+  description: String! # string
+  bounty: BigInt! # uint256
+  creator: Bytes! # address
+  acceptedIndex: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type UserUpdated @entity(immutable: true) {
+  id: Bytes!
+  userAddress: Bytes! # address
+  name: String! # string
+  pictureCID: String! # string
+  reputation: BigInt! # uint256
+  rating: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
