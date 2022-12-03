@@ -1,10 +1,11 @@
 // assets
-import { QuestionOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionOutlined, QuestionCircleOutlined, QuestionCircleFilled } from '@ant-design/icons';
 
 // icons
 const icons = {
     QuestionOutlined,
-    QuestionCircleOutlined
+    QuestionCircleOutlined,
+    QuestionCircleFilled
 };
 
 // ==============================|| MENU ITEMS - DASHBOARD ||============================== //
@@ -14,6 +15,14 @@ const questions = {
     title: 'Questions',
     type: 'group',
     children: [
+        {
+            id: 'latest-questions',
+            title: 'Latest Questions',
+            type: 'item',
+            url: '/latest-questions',
+            icon: icons.QuestionCircleFilled,
+            breadcrumbs: true
+        },
         {
             id: 'ask-question',
             title: 'Ask Question',

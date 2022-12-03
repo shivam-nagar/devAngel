@@ -10,16 +10,15 @@ import axios from 'axios';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
-const MyQuestions = () => {
-    const [myQuestions, setMyQuestions] = useState([]);
+const LatestQuestions = () => {
+    const [latestQuestions, setLatestQuestions] = useState([]);
     const [fetchState, setFetchState] = useState(false);
-    const userId = Utils.getMyAddress();
 
     async function getUserQuestions() {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    questionUpdateds(creator:"${userId}", first: 50) {
+                    questionUpdateds(first: 50) {
                         id
                         creator
                         questionId
@@ -29,7 +28,7 @@ const MyQuestions = () => {
                     }
                 }`
             });
-            setMyQuestions(response.data.data.questionUpdateds);
+            setLatestQuestions(response.data.data.questionUpdateds);
             setFetchState(true);
         } catch (error) {
             console.error(error);
@@ -46,4 +45,4 @@ const MyQuestions = () => {
     );
 };
 
-export default MyQuestions;
+export default LatestQuestions;
