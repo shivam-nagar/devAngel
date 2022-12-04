@@ -80,9 +80,31 @@ const Profile = () => {
         setOpen((prevOpen) => !prevOpen);
     };
 
+    async function queryUserDetails() {
+        const response = await axios.post(Utils.graphAPI, {
+            query: `{
+                userUpdateds(where: { userAddress: "${userAddress}"}, first: 5) {
+                    id
+                    userAddress
+                    name
+                    pictureCID
+                    rating
+                    reputation
+                }
+            }`
+        });
+        return response.data.data.userUpdateds[0];
+    }
+
     const accountChangeHandler = async (account) => {
         setAddress(account);
         Utils.setMyAddress(account);
+        let userDetails = queryUserDetails();
+        if (!userDetails.name){
+            console.log('New user signup');
+            const newname = prompt('New user signup, Please provide your name');
+            await Utils.createUser(newname);
+        }
         navigate('/profile')
     };
 

@@ -38,30 +38,17 @@ import { useNavigate } from 'react-router-dom';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
-const tags = ['Polygon', 'Huddle01'];
 const UserProfile = (userAddress) => {
+
     let { id } = useParams();
     userAddress = id ? id : Utils.getMyAddress();
 
     const [userDetails, setUserDetails] = useState({});
     const [userQuestions, setUserQuestions] = useState([]);
-    const [fetchState, setFetchState] = useState(false);
 
     const navigate = useNavigate();
 
-    if (!Utils.getMyAddress()) {
-        return (
-            <MainCard sx={{ mt: 0 }}>
-                <CardContent>
-                    <Alert severity="error">
-                        <Typography variant="h5">Connect wallet to access your profile</Typography>
-                    </Alert>
-                </CardContent>
-            </MainCard>
-        );
-    }
-
-    async function fetchUserDetails() {
+    async function queryUserDetails() {
         const response = await axios.post(Utils.graphAPI, {
             query: `{
                 userUpdateds(where: { userAddress: "${userAddress}"}, first: 5) {
@@ -74,31 +61,9 @@ const UserProfile = (userAddress) => {
                 }
             }`
         });
-        const userDetail = response.data.data.userUpdateds[0];
-        setUserDetails(response.data.data.userUpdateds[0]);
-    }
-
-    async function getUserDetails() {
-        try {
-            let userDetail = fetchUserDetails();
-            console.log(userDetails);
-            if(fetchState && !userDetails.name) {
-                console.log("New user signup");
-                const newname = prompt("New user signup, Please provide your name")
-                Utils.createUser(newname);
-                userDetail = {
-                    userAddress: Utils.getMyAddress(),
-                    name: newname,
-                    pictureCID: 'QmQVUMcKzZ9pbpMK1Pv7kFFc3H6ppYauXV5YP6P5KngayP',
-                    rating: 0,
-                    reputation: 0,
-                }
-            }
-            console.log(userDetail);
-            setUserDetails(userDetail);
-        } catch (error) {
-            console.error(error);
-        }
+        const userDetails = response.data.data.userUpdateds[0];
+        console.log(userDetails);
+        setUserDetails(userDetails);
     }
 
     async function getUserQuestions() {
@@ -120,11 +85,25 @@ const UserProfile = (userAddress) => {
             console.error(error);
         }
     }
-    if (!fetchState) {
-        getUserDetails();
+
+    async function populateUserData(){
+        if (!Utils.getMyAddress()) {
+            return (
+                <MainCard sx={{ mt: 0 }}>
+                    <CardContent>
+                        <Alert severity="error">
+                            <Typography variant="h5">Connect wallet to access your profile</Typography>
+                        </Alert>
+                    </CardContent>
+                </MainCard>
+            );
+        }
+
+        await queryUserDetails();
         getUserQuestions();
-        setFetchState(true);
     }
+
+    populateUserData();
 
     return (
         <>
@@ -146,7 +125,13 @@ const UserProfile = (userAddress) => {
                 </CardContent>
                 {Utils.getMyAddress() !== userAddress ? (
                     <CardActions>
-                        <Button size="small" variant="outlined" onClick={() => navigate(`/connect/${userDetails.userAddress}`)} startIcon={<MessageOutlined />} style={{ cursor: 'pointer' }}>
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={() => navigate(`/connect/${userDetails.userAddress}`)}
+                            startIcon={<MessageOutlined />}
+                            style={{ cursor: 'pointer' }}
+                        >
                             Chat
                         </Button>
                     </CardActions>
