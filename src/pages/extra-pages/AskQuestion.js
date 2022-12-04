@@ -37,6 +37,9 @@ const AskQuestion = () => {
     };
 
     function onSelect(selectedList, selectedItem) {}
+    function submitQuestion(){
+        Utils.AskQuestion();
+    }
 
     function onRemove(selectedList, removedItem) {}
 
@@ -122,7 +125,7 @@ const AskQuestion = () => {
                             </AvatarGroup>
                         </Grid>
                     </Grid>
-                    <Button size="small" variant="contained" sx={{ textTransform: 'capitalize' }}>
+                    <Button size="small" onClick= {submitQuestion} variant="contained" sx={{ textTransform: 'capitalize' }}>
                         Need Help?
                     </Button>
                 </Stack>
