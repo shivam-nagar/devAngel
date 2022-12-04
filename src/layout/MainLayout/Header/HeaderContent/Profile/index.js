@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
-const ethers = require('ethers');
+
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -30,9 +30,6 @@ import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import Utils from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
-
-
-const devAngelABI = require('smart-contract/ABI.json');
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -86,26 +83,7 @@ const Profile = () => {
     const accountChangeHandler = async (account) => {
         setAddress(account);
         Utils.setMyAddress(account);
-
-        navigate(window.location.pathname);
-
-        // Connect to the network
-        // const provider = new ethers.providers.Web3Provider(window.ethereum);
-        let provider = ethers.getDefaultProvider();
-        const accounts = await ethereum.request({ method: 'eth_accounts' });
-        let DEV_ANGEL_CONTRACT_ADDRESS = '0xC7970e9C5AA18a7A9Bf21C322BFa8eceBE7B7A26';
-        let contract = new ethers.Contract(DEV_ANGEL_CONTRACT_ADDRESS, devAngelABI, provider);
-        let privateKey = '1be05b032bc9df2b4b064782109e66c31af35f7887459e1fdf7a105510c990a7';
-        let wallet = new ethers.Wallet(privateKey, provider);
-        let contractWithSigner = new ethers.Contract(DEV_ANGEL_CONTRACT_ADDRESS, devAngelABI, wallet);
-
-        console.log('Asking..' + contractWithSigner);
-        let txReceipt = await contractWithSigner.askQuestion(address, 'Test Question 1', 'Test Description 1', ['web3'], 10);
-        const link = 'https://goerli.etherscan.io/tx/' + txReceipt.hash;
-        console.log(link);
-        alert(link);
-        let result = await txReceipt.wait(1);
-        console.log(result);
+        Utils.createUser();
     };
 
     const handleClose = (event) => {
