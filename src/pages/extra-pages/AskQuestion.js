@@ -25,8 +25,10 @@ import avatar4 from 'assets/images/users/avatar-4.png';
 import { FormControl } from '../../../node_modules/@mui/material/index';
 import { CardContent } from '../../../node_modules/@mui/material/index';
 import { Alert } from '../../../node_modules/@mui/material/index';
+import { useState } from 'react';
 
 // ==============================|| SAMPLE PAGE ||============================== //
+
 
 const AskQuestion = () => {
     const state = {
@@ -35,13 +37,22 @@ const AskQuestion = () => {
             { name: 'Huddle01', id: 2 }
         ]
     };
+    const [title, setTitle] = useState("");
+    const [desc, setDesc] = useState("");
+    const [bounty, setBounty] = useState(0);
+    const [tags, setTags] = useState([]);
 
-    function onSelect(selectedList, selectedItem) {}
     function submitQuestion(){
-        Utils.AskQuestion();
+        Utils.AskQuestion(address, title, description, tags, bounty);
     }
 
-    function onRemove(selectedList, removedItem) {}
+    function onSelect(selectedList, selectedItem) {
+        tags.add(selectedItem);
+    }
+
+    function onRemove(selectedList, removedItem) {
+        tags.remove(removedItem);
+    }
 
     if(!Utils.getMyAddress()) {
         return (
@@ -69,17 +80,17 @@ const AskQuestion = () => {
                         <div>
                             <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
                                 <TextField label="Title" variant="outlined" focused />
-                                <FormHelperText id="title-helper-text">Title</FormHelperText>
+                                <FormHelperText id="title-helper-text" value={title} onChange={(e) => setTitle(e.target.value)}>Title</FormHelperText>
                             </FormControl>
                             <FormControl fullWidth sx={{ m: 1 }}>
                                 <TextField label="Description" variant="outlined" multiline rows={4} maxRows={4} />
-                                <FormHelperText id="desc-helper-text">Description</FormHelperText>
+                                <FormHelperText id="desc-helper-text" value={desc} onChange={(e) => setDesc(e.target.value)}>Description</FormHelperText>
                             </FormControl>
                             <Grid container>
                                 <Grid item>
                                     <FormControl fullWidth sx={{ m: 1 }}>
                                         <TextField label="Bounty" variant="outlined" number />
-                                        <FormHelperText id="title-helper-text">Bounty</FormHelperText>
+                                        <FormHelperText id="title-helper-text" value={bounty} onChange={(e) => setBounty(e.target.value)}>Bounty</FormHelperText>
                                     </FormControl>
                                 </Grid>
                                 <Grid item>

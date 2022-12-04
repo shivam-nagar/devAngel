@@ -174,6 +174,10 @@ const Question = () => {
         );
     }
 
+    function showInterest(){
+        Utils.updateProposer(question.questionId, ethers.Address(address));
+    }
+
     function showProposals() {
         return (
             <MainCard sx={{ mt: 2 }} title="Proposals">
@@ -193,7 +197,7 @@ const Question = () => {
                     </Grid>
                     {question.creator !== Utils.getMyAddress() ? (
                         <Grid item sx={{ ml: 2 }} key={'dummy'}>
-                            <Button size="large" variant="contained">
+                            <Button size="large" onClick={showInterest} variant="contained">
                                 Show Interest
                             </Button>
                         </Grid>
