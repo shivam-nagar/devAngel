@@ -59,7 +59,7 @@ const Question = () => {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    questionUpdateds(questionId: "${questionID}", first: 50) {
+                    questionUpdateds(where: { questionId: "${questionID}"}, first: 50) {
                         id
                         creator
                         questionId
@@ -70,6 +70,7 @@ const Question = () => {
                 }`
             });
             setQuestion(response.data.data.questionUpdateds[0]);
+            return response.data.data.questionUpdateds[0];
         } catch (error) {
             console.error(error);
         }
@@ -78,7 +79,7 @@ const Question = () => {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    userUpdateds(userAddress: "${creatorId}" , first: 50) {
+                    userUpdateds(where: { userAddress: "${creatorId}"}, first: 50) {
                         id
                         userAddress
                         name
@@ -89,6 +90,7 @@ const Question = () => {
                 }`
             });
             setCreator(response.data.data.userUpdateds[0]);
+            return response.data.data.userUpdateds[0];
         } catch (error) {
             console.error(error);
         }
@@ -96,24 +98,26 @@ const Question = () => {
     async function getProposals(questionId) {
         try {
             // TODO: get proposals
-            setProposals([]);
+            setProposals(dummy_proposals);
         } catch (error) {
             console.error(error);
         }
     }
     if (!fetchState) {
-        getQuestion();
-        getCreator(question.creator);
-        getProposals(question.id);
+        getQuestion().then((question) => {
+            console.log(question);
+            getCreator(question.creator);
+            getProposals(question.id);
+        });
 
-        if(proposals.length > 0) {
+        if (proposals.length > 0) {
             setQuestionStatus(1);
         }
         setFetchState(true);
     }
 
     // const question = Utils.createQuestion(123, 'the title issfor the quesiotin', 'seome descriptions is valid', [123, 125], 0, ['Polygon']);
-    // const proposals = [Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123)];
+    const dummy_proposals = [Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123)];
 
     const [questionStatus, setQuestionStatus] = useState(0);
     const [showHuddle, setShowHuddle] = useState(false);
@@ -130,7 +134,7 @@ const Question = () => {
 
     function getProposalCard(proposal, index) {
         return (
-            <Grid item m={3} key={proposal.id + index}>
+            <Grid item m={1} key={proposal.id + index}>
                 <Card style={{ minWidth: 300 }} key={proposal.id}>
                     <CardContent>
                         <Grid container spacing={2}>
@@ -168,7 +172,18 @@ const Question = () => {
                                         No proposals recieved so far.
                                     </Typography>
                                 ) : (
-                                    <Grid container>{proposals.map(getProposalCard)}</Grid>
+                                    <Grid container>
+                                        {proposals.map(getProposalCard)}
+                                        <Grid item m={1} key={'dummy'}>
+                                            <Card style={{ minWidth: 300 }} key={'testcard'}>
+                                                <CardHeader title="Submit Proposal">
+                                                </CardHeader>
+                                                <CardActions>
+                                                    <Button size="small" variant="outlined">Propose</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </Grid>
+                                    </Grid>
                                 )}
                             </Stack>
                         </Grid>
@@ -230,24 +245,30 @@ const Question = () => {
                         Bounty: {question.bounty} USDT
                     </Typography>
                     {creator ? (
-                    <Stack>
-                        <Grid container spacing={1}>
-                            <Grid item>
-                                <Avatar src={creator.pictureCID} alt={creator.name} style={{ width: '32px', height: '32px' }}></Avatar>
+                        <Stack>
+                            <Grid container spacing={1}>
+                                <Grid item>
+                                    <Avatar src={creator.pictureCID} alt={creator.name} style={{ width: '32px', height: '32px' }}></Avatar>
+                                </Grid>
+                                <Grid item mt={1}>
+                                    <Typography variant="h5" mt={0}>
+                                        {creator.name}
+                                    </Typography>
+                                </Grid>
                             </Grid>
                             <Grid item mt={1}>
-                                <Typography variant="h5" mt={0}>
-                                    {creator.name}
+                                <Typography variant="body1">
+                                    {' '}
+                                    Rating: {creator.rating}/10 &nbsp; | &nbsp; Reputation: {creator.reputation} points
                                 </Typography>
                             </Grid>
-                        </Grid>
-                        <Grid item mt={1}>
-                            <Typography variant="body1"> Rating: {creator.rating}/10 &nbsp; | &nbsp; Reputation: {creator.reputation} points</Typography>
-                        </Grid>
-                    </Stack>) : <></>}
+                        </Stack>
+                    ) : (
+                        <></>
+                    )}
                 </Stack>
             </MainCard>
-            {questionStatus == 1 ? showVideoCall() : showProposals() }
+            {questionStatus == 1 ? showVideoCall() : showProposals()}
         </>
     );
 };

@@ -68,7 +68,7 @@ const Experts = () => {
                                     </Typography>
                                 }
                                 subheader={`Reputation: ${expert.reputation} | Rating: ${expert.rating}/10`}
-                                onClick={() => navigate(`/profile/${expert.id}`)}
+                                onClick={() => navigate(`/profile/${expert.userAddress}`)}
                             />
                             <CardActions>
                                 <Button size="small" variant="outlined" startIcon={<MessageOutlined />} style={{ cursor: 'pointer' }}>
