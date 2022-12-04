@@ -16,8 +16,6 @@ const MintForm = ({ setAppState, chainId, setMessage, setNftInfo }) => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
-      <Typography variant="h3" sx={{ mb: 3 }}>Mint Call Recording as NFT with LivePeer</Typography> 
-
       <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
           <TextField label="Title" variant="outlined" focused onChange={(e) => setTitle(e.target.value)} />
           <FormHelperText id="title-helper-text" value={title}>Title</FormHelperText>

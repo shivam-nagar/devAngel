@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
-
+import axios from '../../../../../../node_modules/axios/index';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -30,6 +30,7 @@ import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import Utils from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
+import { setUserAgent } from 'react-device-detect';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -80,7 +81,7 @@ const Profile = () => {
         setOpen((prevOpen) => !prevOpen);
     };
 
-    async function queryUserDetails() {
+    async function queryUserDetails(userAddress) {
         const response = await axios.post(Utils.graphAPI, {
             query: `{
                 userUpdateds(where: { userAddress: "${userAddress}"}, first: 5) {
@@ -93,19 +94,26 @@ const Profile = () => {
                 }
             }`
         });
-        return response.data.data.userUpdateds[0];
+        return response;
     }
 
     const accountChangeHandler = async (account) => {
         setAddress(account);
         Utils.setMyAddress(account);
-        let userDetails = queryUserDetails();
-        if (!userDetails.name){
-            console.log('New user signup');
-            const newname = prompt('New user signup, Please provide your name');
-            await Utils.createUser(newname);
-        }
-        navigate('/profile')
+        console.log("hello"+account)
+        
+        queryUserDetails(account).then((response) => {
+            let userDetails = response.data.data.userUpdateds[0];
+            // console.log("hello"+userDetails.name)
+            if (!userDetails || !userDetails.name){
+                console.log('New user signup');
+                const newname = prompt('New user signup, Please provide your name');
+                console.log(newname);
+                if(!newname) window.location.reload();
+                Utils.createUser(newname);
+            }
+            navigate('/profile')
+        })
     };
 
     const handleClose = (event) => {
@@ -168,7 +176,6 @@ const Profile = () => {
                         {open && (
                             <Paper
                                 sx={{
-                                    boxShadow: theme.customShadows.z1,
                                     width: 290,
                                     minWidth: 240,
                                     maxWidth: 290,

@@ -238,10 +238,10 @@ const Question = () => {
         return (
             <Card sx={{ mt: 2 }}>
                 {livePeer ? (
-                    <></>
+                    <Typography variant="h3" sx={{ m: 3, mb: 0 }}>Mint Call Recording as NFT with LivePeer</Typography> 
                 ) : (
                     <CardHeader
-                        avatar={<Avatar aria-label="recipe" src={null} alt="Krati"></Avatar>}
+                        avatar={<Avatar aria-label="recipe" src={null} alt=""></Avatar>}
                         action={
                             showHuddle ? (
                                 <Button variant="contained" aria-label="settings" onClick={startLivePeer}>
@@ -253,7 +253,7 @@ const Question = () => {
                                 </Button>
                             )
                         }
-                        title="Connected to Krati"
+                        title="Connected"
                         subheader="Active 2 minutes ago."
                     />
                 )}
