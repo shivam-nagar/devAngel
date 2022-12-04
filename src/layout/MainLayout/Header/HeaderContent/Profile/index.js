@@ -83,7 +83,7 @@ const Profile = () => {
     const accountChangeHandler = async (account) => {
         setAddress(account);
         Utils.setMyAddress(account);
-        Utils.createUser();
+        navigate('/profile')
     };
 
     const handleClose = (event) => {

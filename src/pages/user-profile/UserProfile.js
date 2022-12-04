@@ -61,21 +61,41 @@ const UserProfile = (userAddress) => {
         );
     }
 
+    async function fetchUserDetails() {
+        const response = await axios.post(Utils.graphAPI, {
+            query: `{
+                userUpdateds(where: { userAddress: "${userAddress}"}, first: 5) {
+                    id
+                    userAddress
+                    name
+                    pictureCID
+                    rating
+                    reputation
+                }
+            }`
+        });
+        const userDetail = response.data.data.userUpdateds[0];
+        setUserDetails(response.data.data.userUpdateds[0]);
+    }
+
     async function getUserDetails() {
         try {
-            const response = await axios.post(Utils.graphAPI, {
-                query: `{
-                    userUpdateds(where: { userAddress: "${userAddress}"}, first: 5) {
-                        id
-                        userAddress
-                        name
-                        pictureCID
-                        rating
-                        reputation
-                    }
-                }`
-            });
-            setUserDetails(response.data.data.userUpdateds[0]);
+            let userDetail = fetchUserDetails();
+            console.log(userDetails);
+            if(fetchState && !userDetails.name) {
+                console.log("New user signup");
+                const newname = prompt("New user signup, Please provide your name")
+                Utils.createUser(newname);
+                userDetail = {
+                    userAddress: Utils.getMyAddress(),
+                    name: newname,
+                    pictureCID: 'QmQVUMcKzZ9pbpMK1Pv7kFFc3H6ppYauXV5YP6P5KngayP',
+                    rating: 0,
+                    reputation: 0,
+                }
+            }
+            console.log(userDetail);
+            setUserDetails(userDetail);
         } catch (error) {
             console.error(error);
         }
