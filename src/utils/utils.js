@@ -30,6 +30,7 @@ const devAngelContract = new ethers.Contract("0xC7970e9C5AA18a7A9Bf21C322BFa8ece
 async function printTx(txHash) {
     const link = "https://goerli.etherscan.io/tx/"+txHash;
     console.log(link);
+    alert("Successfully Submitted. Check console for tx link");
     let result = await txReceipt.wait(1)
     console.log(result);
 }
