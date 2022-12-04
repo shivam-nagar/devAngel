@@ -159,12 +159,16 @@ const Question = () => {
                             </Grid>
                         </Grid>
                     </CardContent>
-                    <CardActions>
-                        <Button size="small" variant="outlined" onClick={() => startChat(question, proposal)}>
-                            Chat
-                        </Button>
-                        <Button size="small"></Button>
-                    </CardActions>
+                    {question.creator === Utils.getMyAddress() ? (
+                        <CardActions>
+                            <Button size="small" variant="outlined" onClick={() => startChat(question, proposal)}>
+                                Chat
+                            </Button>
+                            <Button size="small"></Button>
+                        </CardActions>
+                    ) : (
+                        <></>
+                    )}
                 </Card>
             </Grid>
         );
@@ -182,23 +186,20 @@ const Question = () => {
                                         No proposals recieved so far.
                                     </Typography>
                                 ) : (
-                                    <Grid container>
-                                        {proposals.map(getProposalCard)}
-                                        <Grid item m={1} key={'dummy'}>
-                                            <Card style={{ minWidth: 300 }} key={'testcard'}>
-                                                <CardHeader title="Submit Proposal"></CardHeader>
-                                                <CardActions>
-                                                    <Button size="small" variant="outlined">
-                                                        Propose
-                                                    </Button>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                    </Grid>
+                                    <Grid container>{proposals.map(getProposalCard)}</Grid>
                                 )}
                             </Stack>
                         </Grid>
                     </Grid>
+                    {question.creator !== Utils.getMyAddress() ? (
+                        <Grid item sx={{ ml: 2 }} key={'dummy'}>
+                            <Button size="large" variant="contained">
+                                Show Interest
+                            </Button>
+                        </Grid>
+                    ) : (
+                        <></>
+                    )}
                 </Stack>
             </MainCard>
         );
