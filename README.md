@@ -31,7 +31,9 @@ For providing support we are integrated Push Chat uiweb and restapi npm packages
 
 4. LivePeer Video Mint:
 Code adapted from Rahat's Livepeer workshop. We download the recording of the Huddle01 call and mint a video NFT from it.
-<img width="1311" alt="Screenshot 2022-12-04 at 9 28 41 AM" src="https://user-images.githubusercontent.com/7895856/205473637-ed896cb7-f6d0-40c8-8106-2f2d95f7631f.png">
+
+<img width="1239" alt="Screenshot 2022-12-04 at 9 30 49 AM" src="https://user-images.githubusercontent.com/7895856/205473680-4af6edea-efcf-4e00-b9bd-0f8e30f4e483.png">
+<img width="1424" alt="Screenshot 2022-12-04 at 9 28 13 AM" src="https://user-images.githubusercontent.com/7895856/205473701-bdc76faa-9fc1-492a-909f-76d71a699014.png">
 
 5. UX
 We used UI template from https://mui.com/store/items/mantis-react-admin-dashboard-template/
