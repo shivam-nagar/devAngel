@@ -54,6 +54,18 @@ const headCells = [
         label: 'Title'
     },
     {
+        id: 'sub-title',
+        align: 'left',
+        disablePadding: true,
+        label: ''
+    },
+    {
+        id: 'sub-title1',
+        align: 'left',
+        disablePadding: true,
+        label: ''
+    },
+    {
         id: 'Bounty',
         align: 'right',
         disablePadding: false,
@@ -197,7 +209,7 @@ export default function QuestionsTable(params) {
                                     style={{ cursor: 'pointer' }}
                                     onClick={() => setRow(index)}
                                 >
-                                    <TableCell style={{ overflow: 'hidden' }}>
+                                    <TableCell style={{ overflow: 'hidden' }} colSpan={3}>
                                         <Typography variant="h5" fullwidth>{row.title}</Typography>
                                         <Typography variant="subtitle" fullwidth>{row.description}</Typography>
                                     </TableCell>
