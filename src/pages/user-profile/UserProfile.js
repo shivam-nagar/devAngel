@@ -34,6 +34,7 @@ import avatar4 from 'assets/images/users/avatar-4.png';
 import { FormControl } from '../../../node_modules/@mui/material/index';
 
 import QuestionsTable from '../extra-pages/QuestionsTable';
+import { useNavigate } from 'react-router-dom';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -46,7 +47,9 @@ const UserProfile = (userAddress) => {
     const [userQuestions, setUserQuestions] = useState([]);
     const [fetchState, setFetchState] = useState(false);
 
-    if(!Utils.getMyAddress()) {
+    const navigate = useNavigate();
+
+    if (!Utils.getMyAddress()) {
         return (
             <MainCard sx={{ mt: 0 }}>
                 <CardContent>
@@ -55,7 +58,7 @@ const UserProfile = (userAddress) => {
                     </Alert>
                 </CardContent>
             </MainCard>
-        )
+        );
     }
 
     async function getUserDetails() {
@@ -121,6 +124,15 @@ const UserProfile = (userAddress) => {
                         </Grid>
                     </Grid>
                 </CardContent>
+                {Utils.getMyAddress() !== userAddress ? (
+                    <CardActions>
+                        <Button size="small" variant="outlined" onClick={() => navigate(`/connect/${userDetails.userAddress}`)} startIcon={<MessageOutlined />} style={{ cursor: 'pointer' }}>
+                            Chat
+                        </Button>
+                    </CardActions>
+                ) : (
+                    <></>
+                )}
             </MainCard>
             <MainCard sx={{ mt: 3 }} title={userDetails.name + "'s Questions"}>
                 <QuestionsTable items={userQuestions}></QuestionsTable>

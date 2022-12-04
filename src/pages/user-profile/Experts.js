@@ -24,6 +24,7 @@ import { Avatar, FormControl, Container, Stack, Grid } from '../../../node_modul
 const tags = ['Polygon', 'Huddle01'];
 
 const Experts = () => {
+    const userId = Utils.getMyAddress();
     const [expertsList, setExpertsList] = useState([]);
     const [fetchState, setFetchState] = useState(false);
     async function getExperts() {
@@ -52,6 +53,7 @@ const Experts = () => {
     return (
         <Grid container spacing={2}>
             {expertsList.map((expert, index) => {
+                if (userId === expert.userAddress) return <></>;
                 return (
                     <Grid item key={expert.id}>
                         <Card sx={{ maxWidth: 300, minWidth: 300 }} style={{ flex: 1 }}>
@@ -71,7 +73,13 @@ const Experts = () => {
                                 onClick={() => navigate(`/profile/${expert.userAddress}`)}
                             />
                             <CardActions>
-                                <Button size="small" variant="outlined" onClick={() => navigate(`/connect/${expert.userAddress}`)} startIcon={<MessageOutlined />} style={{ cursor: 'pointer' }}>
+                                <Button
+                                    size="small"
+                                    variant="outlined"
+                                    onClick={() => navigate(`/connect/${expert.userAddress}`)}
+                                    startIcon={<MessageOutlined />}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     Chat
                                 </Button>
                             </CardActions>

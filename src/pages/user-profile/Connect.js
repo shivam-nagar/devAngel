@@ -148,7 +148,7 @@ const Connect = () => {
                     )}
                 </Stack>
             </MainCard>
-            { showVideoCall() }
+            { userDetails ? showVideoCall() : <></> }
         </>
     );
 };
