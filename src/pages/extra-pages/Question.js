@@ -174,7 +174,7 @@ const Question = () => {
         );
     }
 
-    function showInterest(){
+    function showInterest() {
         Utils.updateProposer(question.questionId, ethers.utils.getAddress(address));
     }
 
@@ -237,22 +237,26 @@ const Question = () => {
     function showVideoCall() {
         return (
             <Card sx={{ mt: 2 }}>
-                <CardHeader
-                    avatar={<Avatar aria-label="recipe" src={null} alt="Krati"></Avatar>}
-                    action={
-                        showHuddle ? (
-                            <Button variant="contained" aria-label="settings" onClick={startLivePeer}>
-                                Mint Recording as NFT
-                            </Button>
-                        ) : (
-                            <Button variant="contained" aria-label="settings" onClick={startHuddle}>
-                                Start Huddle
-                            </Button>
-                        )
-                    }
-                    title="Connected to Krati"
-                    subheader="Active 2 minutes ago."
-                />
+                {livePeer ? (
+                    <></>
+                ) : (
+                    <CardHeader
+                        avatar={<Avatar aria-label="recipe" src={null} alt="Krati"></Avatar>}
+                        action={
+                            showHuddle ? (
+                                <Button variant="contained" aria-label="settings" onClick={startLivePeer}>
+                                    Mint Recording as NFT
+                                </Button>
+                            ) : (
+                                <Button variant="contained" aria-label="settings" onClick={startHuddle}>
+                                    Start Huddle
+                                </Button>
+                            )
+                        }
+                        title="Connected to Krati"
+                        subheader="Active 2 minutes ago."
+                    />
+                )}
                 <CardContent>{livePeer ? getLivePeer() : getHuddle()}</CardContent>
             </Card>
         );
