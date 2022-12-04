@@ -41,6 +41,7 @@ import avatar4 from 'assets/images/users/avatar-4.png';
 import { FormControl } from '../../../node_modules/@mui/material/index';
 import TableCell from 'themes/overrides/TableCell';
 import Chat from './chat/chat';
+import LivePeerApp from 'livepeer/LivePeerApp';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
@@ -219,7 +220,13 @@ const Question = () => {
     }
 
     function getLivePeer() {
-
+        return (
+            <Grid container style={{ width: '100%' }}>
+                <Grid item>
+                    <LivePeerApp />
+                </Grid>
+            </Grid>
+        );
     }
 
     function showVideoCall() {
@@ -241,9 +248,7 @@ const Question = () => {
                     title="Connected to Krati"
                     subheader="Active 2 minutes ago."
                 />
-                <CardContent>
-                    {livePeer? getLivePeer(): getHuddle()}
-                </CardContent>
+                <CardContent>{livePeer ? getLivePeer() : getHuddle()}</CardContent>
             </Card>
         );
     }

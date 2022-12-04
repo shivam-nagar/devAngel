@@ -2,15 +2,15 @@ import { useState } from 'react';
 import './LivePeerApp.css';
 import ConnectWallet from './components/ConnectWallet';
 import Nft from './components/Nft';
-import Utils from './';
+import Utils from 'utils/utils';
 
 function LivePeerApp() {
-  const [chainId, setChainId] = useState("5");
-  const [address, setAddress] = useState(Utils.getMyAddress());
+  const [chainId, setChainId] = useState();
+  const [address, setAddress] = useState();
   const [appState, setAppState] = useState("Ready to mint");
   console.log({ chainId })
   return (
-    <div className="App">
+    <div className="">
       <header className="App-header">
        {
          !address && (
