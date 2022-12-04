@@ -117,10 +117,14 @@ const Question = () => {
     }
 
     // const question = Utils.createQuestion(123, 'the title issfor the quesiotin', 'seome descriptions is valid', [123, 125], 0, ['Polygon']);
-    const dummy_proposals = [Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123), Utils.createProposal(234, 123, 123)];
+    const dummy_proposals = [
+        Utils.createProposal('Krati', 'Reputation: 100 | Rating 8/10', avatar2),
+        Utils.createProposal('Carboncubie', 'Reputation: 132 | Rating 9/10', avatar1)
+    ];
 
     const [questionStatus, setQuestionStatus] = useState(0);
     const [showHuddle, setShowHuddle] = useState(false);
+    const [livePeer, setLivePeer] = useState(false);
 
     function startChat(question, proposal) {
         console.log(question, proposal);
@@ -132,6 +136,11 @@ const Question = () => {
         setShowHuddle(true);
     }
 
+    function startLivePeer() {
+        setShowHuddle(false);
+        setLivePeer(true);
+    }
+
     function getProposalCard(proposal, index) {
         return (
             <Grid item m={1} key={proposal.id + index}>
@@ -139,19 +148,19 @@ const Question = () => {
                     <CardContent>
                         <Grid container spacing={2}>
                             <Grid item xs={0}>
-                                <Avatar alt="Remy Sharp" src={avatar1} />
+                                <Avatar alt={proposal.id} src={null} />
                             </Grid>
                             <Grid item xs={6}>
                                 <Typography variant="h3">{proposal.id}</Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography variant="h5">{proposal.id}$</Typography>
+                                <Typography variant="caption">{proposal.qid}</Typography>
                             </Grid>
                         </Grid>
                     </CardContent>
                     <CardActions>
                         <Button size="small" variant="outlined" onClick={() => startChat(question, proposal)}>
-                            Accept
+                            Chat
                         </Button>
                         <Button size="small"></Button>
                     </CardActions>
@@ -176,10 +185,11 @@ const Question = () => {
                                         {proposals.map(getProposalCard)}
                                         <Grid item m={1} key={'dummy'}>
                                             <Card style={{ minWidth: 300 }} key={'testcard'}>
-                                                <CardHeader title="Submit Proposal">
-                                                </CardHeader>
+                                                <CardHeader title="Submit Proposal"></CardHeader>
                                                 <CardActions>
-                                                    <Button size="small" variant="outlined">Propose</Button>
+                                                    <Button size="small" variant="outlined">
+                                                        Propose
+                                                    </Button>
                                                 </CardActions>
                                             </Card>
                                         </Grid>
@@ -193,30 +203,46 @@ const Question = () => {
         );
     }
 
+    function getHuddle() {
+        return (
+            <Stack direction="row" spacing={0}>
+                <Grid container style={{ width: '380px' }}>
+                    <Grid item>
+                        <Chat></Chat>
+                    </Grid>
+                </Grid>
+                <Grid container style={{ width: 'calc( 100% - 380px )' }}>
+                    <Grid item>{showHuddle ? <HuddleApp></HuddleApp> : <></>}</Grid>
+                </Grid>
+            </Stack>
+        );
+    }
+
+    function getLivePeer() {
+
+    }
+
     function showVideoCall() {
         return (
             <Card sx={{ mt: 2 }}>
                 <CardHeader
-                    avatar={<Avatar aria-label="recipe" src={avatar1}></Avatar>}
+                    avatar={<Avatar aria-label="recipe" src={null} alt="Krati"></Avatar>}
                     action={
-                        <Button variant="contained" aria-label="settings" onClick={startHuddle}>
-                            Start Huddle
-                        </Button>
+                        showHuddle ? (
+                            <Button variant="contained" aria-label="settings" onClick={startLivePeer}>
+                                Mint Recording as NFT
+                            </Button>
+                        ) : (
+                            <Button variant="contained" aria-label="settings" onClick={startHuddle}>
+                                Start Huddle
+                            </Button>
+                        )
                     }
-                    title="Connected to Jane Doe"
+                    title="Connected to Krati"
                     subheader="Active 2 minutes ago."
                 />
                 <CardContent>
-                    <Stack direction="row" spacing={0}>
-                        <Grid container style={{ width: '380px' }}>
-                            <Grid item>
-                                <Chat></Chat>
-                            </Grid>
-                        </Grid>
-                        <Grid container style={{ width: 'calc( 100% - 380px )' }}>
-                            <Grid item>{showHuddle ? <HuddleApp></HuddleApp> : <></>}</Grid>
-                        </Grid>
-                    </Stack>
+                    {livePeer? getLivePeer(): getHuddle()}
                 </CardContent>
             </Card>
         );

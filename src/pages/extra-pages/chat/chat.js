@@ -46,10 +46,9 @@ export default function Chat() {
         <div className={classes.container}>
             <Paper className={classes.paper} zDepth={2}>
                 <Paper id="style-1" className={classes.messagesBody}>
-                    <MessageLeft message="test message 1" avatarDisp={false} />
-                    <MessageRight message="test message 3" avatarDisp={false} />
-                    <MessageLeft message="test message 2" avatarDisp={false} />
-                    <MessageRight message="test message 4" avatarDisp={false} />
+                    <MessageLeft message="Facing this issue" avatarDisp={false} />
+                    <MessageLeft message="Can we connect over a call?" avatarDisp={false} />
+                    <MessageRight message="Yes, Let's connect over Huddle" avatarDisp={false} />
                 </Paper>
                 <TextInput />
             </Paper>
