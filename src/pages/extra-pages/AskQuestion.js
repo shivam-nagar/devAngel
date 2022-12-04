@@ -1,5 +1,7 @@
 // material-ui
 import { Typography } from '@mui/material';
+const ethers = require('ethers');
+
 
 // project import
 import MainCard from 'components/MainCard';
@@ -40,7 +42,7 @@ const AskQuestion = () => {
         console.log(tags);
         let tempTags = tags.map(x => x.id);
         console.log("Asking question:" + title + " with desc: "+ desc + " and tags: " + tempTags + " and bounty: "+ bounty);
-        Utils.AskQuestion(address, title, desc, tempTags, bounty);
+        Utils.askQuestion(ethers.utils.getAddress(Utils.getMyAddress()), title, desc, tempTags, bounty);
     }      
       const KeyCodes = {
         comma: 188,
@@ -95,22 +97,22 @@ const AskQuestion = () => {
                     >
                         <div>
                             <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
-                                <TextField label="Title" variant="outlined" focused />
-                                <FormHelperText id="title-helper-text" value={title} onChange={(e) => setTitle(e.target.value)}>
+                                <TextField label="Title" variant="outlined" focused value={title} onChange={(e) => setTitle(e.target.value)}/>
+                                <FormHelperText id="title-helper-text">
                                     Title
                                 </FormHelperText>
                             </FormControl>
                             <FormControl fullWidth sx={{ m: 1 }}>
-                                <TextField label="Description" variant="outlined" multiline rows={4} maxRows={4} />
-                                <FormHelperText id="desc-helper-text" value={desc} onChange={(e) => setDesc(e.target.value)}>
+                                <TextField label="Description" variant="outlined" multiline rows={4} maxRows={4} value={desc} onChange={(e) => setDesc(e.target.value)}/>
+                                <FormHelperText id="desc-helper-text">
                                     Description
                                 </FormHelperText>
                             </FormControl>
                             <Grid container>
                                 <Grid item>
                                     <FormControl fullWidth sx={{ m: 1 }}>
-                                        <TextField label="Bounty" variant="outlined" number />
-                                        <FormHelperText id="title-helper-text" value={bounty} onChange={(e) => setBounty(e.target.value)}>
+                                        <TextField label="Bounty" variant="outlined" number value={bounty} onChange={(e) => setBounty(e.target.value)}/>
+                                        <FormHelperText id="title-helper-text">
                                             Bounty
                                         </FormHelperText>
                                     </FormControl>
