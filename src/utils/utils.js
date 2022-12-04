@@ -38,9 +38,9 @@ async function askQuestion() {
     console.log(result);
 }
 
-async function createUser() {
+async function createUser(name) {
     // create user call
-    let txReceipt = await devAngelContract.createUser(myAddress, 'User_'+Date.now(), 'QmQVUMcKzZ9pbpMK1Pv7kFFc3H6ppYauXV5YP6P5KngayP', ['web3'], 40, 5);
+    let txReceipt = await devAngelContract.createUser(ethers.utils.getAddress(myAddress), name, 'QmQVUMcKzZ9pbpMK1Pv7kFFc3H6ppYauXV5YP6P5KngayP', ['web3'], 0, 0);
 
     const link = "https://goerli.etherscan.io/tx/"+txReceipt.hash;
     console.log(link);
