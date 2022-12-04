@@ -26,29 +26,6 @@ const MintForm = ({ setAppState, chainId, setMessage, setNftInfo }) => {
           <TextField label="Description" variant="outlined" multiline rows={4} maxRows={4} onChange={(e) => setDesc(e.target.value)}/>
           <FormHelperText id="desc-helper-text" value={desc}>Description</FormHelperText>
       </FormControl>
-
-      {/* <div className="flex-column">
-        <label>NFT Title</label>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          type="text"
-          name="title"
-          required
-        />
-      </div>
-      <div className="flex-column">
-        <label>Description</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          type="text"
-          name="description"
-          rows="4"
-          cols="50"
-          required
-        />
-      </div> */}
       <button type="submit" onClick={handleSubmit}>Choose Video and Mint</button>
     </form>
   );

@@ -31,7 +31,7 @@ const Experts = () => {
         try {
             const response = await axios.post(Utils.graphAPI, {
                 query: `{
-                    userUpdateds(first: 5) {
+                    userUpdateds(first: 50) {
                         id
                         userAddress
                         name
