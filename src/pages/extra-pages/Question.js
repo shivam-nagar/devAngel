@@ -175,7 +175,7 @@ const Question = () => {
     }
 
     function showInterest(){
-        Utils.updateProposer(question.questionId, ethers.Address(address));
+        Utils.updateProposer(question.questionId, ethers.utils.getAddress(address));
     }
 
     function showProposals() {
