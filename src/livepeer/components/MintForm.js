@@ -13,6 +13,7 @@ const MintForm = ({ setAppState, chainId, setMessage, setNftInfo }) => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
+    <h2>Mint Video NFT Of Your Call</h2>
       <div className="flex-column">
         <label>NFT Title</label>
         <input
