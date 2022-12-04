@@ -121,14 +121,6 @@ const UserProfile = (userAddress) => {
                         </Grid>
                     </Grid>
                 </CardContent>
-                <CardActions>
-                    <Button size="small" variant="outlined" startIcon={<MessageOutlined />} style={{ cursor: 'pointer' }}>
-                        Chat
-                    </Button>
-                    <Button size="small" variant="outlined" startIcon={<VideoCameraOutlined />} style={{ cursor: 'pointer' }}>
-                        Huddle
-                    </Button>
-                </CardActions>
             </MainCard>
             <MainCard sx={{ mt: 3 }} title={userDetails.name + "'s Questions"}>
                 <QuestionsTable items={userQuestions}></QuestionsTable>

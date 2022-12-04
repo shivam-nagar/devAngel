@@ -17,6 +17,7 @@ const LivePeer = Loadable(lazy(() => import('pages/extra-pages/LivePeer')));
 
 // render - Profiles
 const UserProfile = Loadable(lazy(() => import('pages/user-profile/UserProfile')));
+const Connect = Loadable(lazy(() => import('pages/user-profile/Connect')));
 const Experts = Loadable(lazy(() => import('pages/user-profile/Experts')));
 
 // render - utilities
@@ -71,6 +72,10 @@ const MainRoutes = {
         {
             path: 'profile/:id',
             element: <UserProfile />
+        },
+        {
+            path: 'connect/:id',
+            element: <Connect />
         },
         {
             path: 'profile',

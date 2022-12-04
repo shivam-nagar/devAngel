@@ -71,11 +71,8 @@ const Experts = () => {
                                 onClick={() => navigate(`/profile/${expert.userAddress}`)}
                             />
                             <CardActions>
-                                <Button size="small" variant="outlined" startIcon={<MessageOutlined />} style={{ cursor: 'pointer' }}>
+                                <Button size="small" variant="outlined" onClick={() => navigate(`/connect/${expert.userAddress}`)} startIcon={<MessageOutlined />} style={{ cursor: 'pointer' }}>
                                     Chat
-                                </Button>
-                                <Button size="small" variant="outlined" startIcon={<VideoCameraOutlined />} style={{ cursor: 'pointer' }}>
-                                    Huddle
                                 </Button>
                             </CardActions>
                         </Card>

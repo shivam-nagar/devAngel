@@ -87,7 +87,7 @@ const Profile = () => {
         setAddress(account);
         Utils.setMyAddress(account);
 
-        navigate(window.location.pathname);
+        // navigate(window.location.pathname);
 
         // Connect to the network
         // const provider = new ethers.providers.Web3Provider(window.ethereum);
