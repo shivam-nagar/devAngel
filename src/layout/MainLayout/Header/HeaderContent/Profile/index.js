@@ -25,13 +25,16 @@ import Transitions from 'components/@extended/Transitions';
 import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
 
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+
 // assets
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import Utils from 'utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { setUserAgent } from 'react-device-detect';
-
+ 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
     return (
@@ -55,10 +58,21 @@ function a11yProps(index) {
 }
 
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4
+};
 
 const Profile = () => {
     const navigate = useNavigate();
-    
+
     const theme = useTheme();
     const handleLogout = async () => {
         if (window.ethereum) {
@@ -67,7 +81,7 @@ const Profile = () => {
             } else {
                 setAddress(null);
                 Utils.setMyAddress(null);
-                window.location.reload(); 
+                window.location.reload();
             }
         } else {
             alert('install metamask extension!!');
@@ -96,24 +110,31 @@ const Profile = () => {
         });
         return response;
     }
+    const [openModal, setOpenModal] = useState(false);
+    const [userCreateTx, setUserCreateTx] = useState(null);
 
     const accountChangeHandler = async (account) => {
         setAddress(account);
         Utils.setMyAddress(account);
-        console.log("hello"+account)
-        
+        console.log('hello' + account);
+
         queryUserDetails(account).then((response) => {
             let userDetails = response.data.data.userUpdateds[0];
             // console.log("hello"+userDetails.name)
-            if (!userDetails || !userDetails.name){
+            if (!userDetails || !userDetails.name) {
                 console.log('New user signup');
                 const newname = prompt('New user signup, Please provide your name');
                 console.log(newname);
-                if(!newname) window.location.reload();
-                Utils.createUser(newname);
+                if (!newname) window.location.reload();
+                setOpenModal(true);
+                Utils.createUser(newname, setUserCreateTx, () => {
+                    setOpenModal(false);
+                    navigate('/profile');
+                });
+            } else {
+                navigate('/profile');
             }
-            navigate('/profile')
-        })
+        });
     };
 
     const handleClose = (event) => {
@@ -132,6 +153,17 @@ const Profile = () => {
     const iconBackColorOpen = 'grey.300';
     return (
         <Box sx={{ flexShrink: 0, ml: 0.75 }}>
+            <Modal open={openModal}>
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Creating User
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {userCreateTx}
+                    </Typography>
+                </Box>
+            </Modal>
+
             <ButtonBase
                 sx={{
                     p: 0.25,
