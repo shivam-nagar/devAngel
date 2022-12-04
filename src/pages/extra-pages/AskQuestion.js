@@ -1,6 +1,7 @@
 // material-ui
 import { Typography } from '@mui/material';
 const ethers = require('ethers');
+import './tags.css';
 
 
 // project import
@@ -121,12 +122,12 @@ const AskQuestion = () => {
                                     <FormControl sx={{ m: 2 }}>
                                         <ReactTags
                                             tags={tags}
+                                            inline
                                             delimiters={delimiters}
                                             handleDelete={handleDelete}
                                             handleAddition={handleAddition}
                                             handleDrag={handleDrag}
                                             handleTagClick={handleTagClick}
-                                            inputFieldPosition="bottom"
                                             autocomplete
                                         />
                                         <FormHelperText id="desc-helper-text">Tags</FormHelperText>
